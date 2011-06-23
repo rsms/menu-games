@@ -9,13 +9,14 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface MGPongView : NSView {
+@interface MGPongView : NSView <NSWindowDelegate> {
   CGFloat velocity_;
   CGFloat upVector_;
   CGFloat downVector_;
   CGFloat y_;
   uint64_t timeOfLastUpdate_;
   NSTimer *updateTimer_;
+  CALayer *pauseIcon_;
 }
 
 @end

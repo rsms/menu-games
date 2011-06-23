@@ -15,6 +15,8 @@
 		6A88C94813B2EEA300EC6CB2 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A88C94613B2EEA300EC6CB2 /* MainMenu.xib */; };
 		6A88C96013B2F12600EC6CB2 /* MGPongView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A88C95F13B2F12600EC6CB2 /* MGPongView.m */; };
 		6A88C96313B2FC7A00EC6CB2 /* MGGameWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A88C96213B2FC7A00EC6CB2 /* MGGameWindow.m */; };
+		CA89C5D213B324A700D0E1AC /* Pause.png in Resources */ = {isa = PBXBuildFile; fileRef = CA89C5D113B324A700D0E1AC /* Pause.png */; };
+		CA89C5D513B3258800D0E1AC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA89C5D413B3258800D0E1AC /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +37,8 @@
 		6A88C95F13B2F12600EC6CB2 /* MGPongView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MGPongView.m; path = ../MGPongView.m; sourceTree = "<group>"; };
 		6A88C96113B2FC7A00EC6CB2 /* MGGameWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGGameWindow.h; sourceTree = "<group>"; };
 		6A88C96213B2FC7A00EC6CB2 /* MGGameWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGGameWindow.m; sourceTree = "<group>"; };
+		CA89C5D113B324A700D0E1AC /* Pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pause.png; sourceTree = "<group>"; };
+		CA89C5D413B3258800D0E1AC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA89C5D513B3258800D0E1AC /* QuartzCore.framework in Frameworks */,
 				6A88C93213B2EEA300EC6CB2 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -52,6 +57,7 @@
 		6A88C92213B2EEA200EC6CB2 = {
 			isa = PBXGroup;
 			children = (
+				CA89C5D413B3258800D0E1AC /* QuartzCore.framework */,
 				6A88C93713B2EEA300EC6CB2 /* MenuGames */,
 				6A88C93013B2EEA200EC6CB2 /* Frameworks */,
 				6A88C92E13B2EEA200EC6CB2 /* Products */,
@@ -103,6 +109,7 @@
 		6A88C93813B2EEA300EC6CB2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				CA89C5D113B324A700D0E1AC /* Pause.png */,
 				6A88C93913B2EEA300EC6CB2 /* MenuGames-Info.plist */,
 				6A88C93A13B2EEA300EC6CB2 /* InfoPlist.strings */,
 				6A88C93D13B2EEA300EC6CB2 /* MenuGames-Prefix.pch */,
@@ -162,6 +169,7 @@
 				6A88C93C13B2EEA300EC6CB2 /* InfoPlist.strings in Resources */,
 				6A88C94213B2EEA300EC6CB2 /* Credits.rtf in Resources */,
 				6A88C94813B2EEA300EC6CB2 /* MainMenu.xib in Resources */,
+				CA89C5D213B324A700D0E1AC /* Pause.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,6 +298,7 @@
 				6A88C94D13B2EEA300EC6CB2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

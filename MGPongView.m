@@ -7,6 +7,7 @@
 //
 
 #import "MGPongView.h"
+#import <QuartzCore/QuartzCore.h>
 #include <mach/mach.h>
 #include <mach/mach_time.h>
 
@@ -33,6 +34,17 @@
                                                  repeats:YES];
   [updateTimer_ retain];
 
+  // pause icon up in this bitch
+  [self setWantsLayer:YES];
+  NSImage *pauseImage = [NSImage imageNamed:@"Pause"];
+  pauseIcon_ = [CALayer layer];
+  pauseIcon_.contents = pauseImage;
+  pauseIcon_.autoresizingMask =  kCALayerMinXMargin | kCALayerMaxXMargin | kCALayerMinYMargin | kCALayerMaxYMargin;
+  pauseIcon_.contentsGravity = kCAGravityLeft;
+  pauseIcon_.bounds = NSMakeRect(0, 0, pauseImage.size.width, pauseImage.size.height);
+  pauseIcon_.opacity = 0;
+  [self.layer addSublayer:pauseIcon_];
+  
   return self;
 }
 
@@ -111,14 +123,12 @@ static const CGFloat edgeToBarMargin = 7.0; // include barSize.width
   return YES;
 }
 
-- (BOOL)becomeFirstResponder {
-  NSLog(@"becomeFirstResponder");
-  return [super becomeFirstResponder];
+- (void)windowDidBecomeKey:(NSNotification *)notification {
+  pauseIcon_.opacity = 0;
 }
 
-- (BOOL)resignFirstResponder {
-  NSLog(@"resignFirstResponder");
-  return [super resignFirstResponder];
+- (void)windowDidResignKey:(NSNotification *)notification {
+  pauseIcon_.opacity = 1;
 }
 
 - (void)keyDown:(NSEvent *)ev {
