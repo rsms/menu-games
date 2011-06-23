@@ -13,6 +13,8 @@
 		6A88C94213B2EEA300EC6CB2 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 6A88C94013B2EEA300EC6CB2 /* Credits.rtf */; };
 		6A88C94513B2EEA300EC6CB2 /* MenuGamesAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A88C94413B2EEA300EC6CB2 /* MenuGamesAppDelegate.m */; };
 		6A88C94813B2EEA300EC6CB2 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A88C94613B2EEA300EC6CB2 /* MainMenu.xib */; };
+		6A88C96013B2F12600EC6CB2 /* MGPongView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A88C95F13B2F12600EC6CB2 /* MGPongView.m */; };
+		6A88C96313B2FC7A00EC6CB2 /* MGGameWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A88C96213B2FC7A00EC6CB2 /* MGGameWindow.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,14 +23,18 @@
 		6A88C93413B2EEA300EC6CB2 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		6A88C93513B2EEA300EC6CB2 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		6A88C93613B2EEA300EC6CB2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		6A88C93913B2EEA300EC6CB2 /* MenuGames-Info.plist */ = {isa = PBXFileReference; path = "MenuGames-Info.plist"; sourceTree = "<group>"; };
+		6A88C93913B2EEA300EC6CB2 /* MenuGames-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MenuGames-Info.plist"; sourceTree = "<group>"; };
 		6A88C93B13B2EEA300EC6CB2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6A88C93D13B2EEA300EC6CB2 /* MenuGames-Prefix.pch */ = {isa = PBXFileReference; path = "MenuGames-Prefix.pch"; sourceTree = "<group>"; };
+		6A88C93D13B2EEA300EC6CB2 /* MenuGames-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MenuGames-Prefix.pch"; sourceTree = "<group>"; };
 		6A88C93E13B2EEA300EC6CB2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6A88C94113B2EEA300EC6CB2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
-		6A88C94313B2EEA300EC6CB2 /* MenuGamesAppDelegate.h */ = {isa = PBXFileReference; path = MenuGamesAppDelegate.h; sourceTree = "<group>"; };
+		6A88C94313B2EEA300EC6CB2 /* MenuGamesAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MenuGamesAppDelegate.h; sourceTree = "<group>"; };
 		6A88C94413B2EEA300EC6CB2 /* MenuGamesAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MenuGamesAppDelegate.m; sourceTree = "<group>"; };
 		6A88C94713B2EEA300EC6CB2 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		6A88C95E13B2F12600EC6CB2 /* MGPongView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MGPongView.h; path = ../MGPongView.h; sourceTree = "<group>"; };
+		6A88C95F13B2F12600EC6CB2 /* MGPongView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MGPongView.m; path = ../MGPongView.m; sourceTree = "<group>"; };
+		6A88C96113B2FC7A00EC6CB2 /* MGGameWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGGameWindow.h; sourceTree = "<group>"; };
+		6A88C96213B2FC7A00EC6CB2 /* MGGameWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGGameWindow.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +90,10 @@
 			children = (
 				6A88C94313B2EEA300EC6CB2 /* MenuGamesAppDelegate.h */,
 				6A88C94413B2EEA300EC6CB2 /* MenuGamesAppDelegate.m */,
+				6A88C96113B2FC7A00EC6CB2 /* MGGameWindow.h */,
+				6A88C96213B2FC7A00EC6CB2 /* MGGameWindow.m */,
+				6A88C95E13B2F12600EC6CB2 /* MGPongView.h */,
+				6A88C95F13B2F12600EC6CB2 /* MGPongView.m */,
 				6A88C94613B2EEA300EC6CB2 /* MainMenu.xib */,
 				6A88C93813B2EEA300EC6CB2 /* Supporting Files */,
 			);
@@ -164,6 +174,8 @@
 			files = (
 				6A88C93F13B2EEA300EC6CB2 /* main.m in Sources */,
 				6A88C94513B2EEA300EC6CB2 /* MenuGamesAppDelegate.m in Sources */,
+				6A88C96013B2F12600EC6CB2 /* MGPongView.m in Sources */,
+				6A88C96313B2FC7A00EC6CB2 /* MGGameWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

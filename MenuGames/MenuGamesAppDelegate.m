@@ -7,14 +7,50 @@
 //
 
 #import "MenuGamesAppDelegate.h"
+#import "MGPongView.h"
+#import "MGGameWindow.h"
 
 @implementation MenuGamesAppDelegate
 
-@synthesize window;
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+  
+  statusItem_ = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
+  NSView *emptyView = [[NSView alloc] initWithFrame:NSMakeRect(0.0, 0.0, 80.0, 22.0)];
+  [statusItem_ setView:emptyView];
+  [statusItem_ retain];
+  [statusItem_ setEnabled:YES];
+  
+  // Create window
+  gameWindow_ = [[MGGameWindow alloc] initWithContentRect:[self statusItemFrame]
+                                                styleMask:NSBorderlessWindowMask
+                                                  backing:NSBackingStoreBuffered
+                                                    defer:NO];
+  MGPongView *pongView = [[MGPongView alloc] initWithFrame:NSZeroRect];
+  [gameWindow_ setContentView:pongView];
+  [gameWindow_ setLevel:NSStatusWindowLevel];
+  [gameWindow_ setBackgroundColor:[NSColor colorWithCalibratedWhite:1.0 alpha:0.1]];
+  //[gameWindow_ setBackgroundColor:[NSColor clearColor]];
+  [gameWindow_ setOpaque:NO];
+  [gameWindow_ makeKeyAndOrderFront:self];
+  
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(statusItemWindowDidMove:)
+                                               name:NSWindowDidMoveNotification
+                                             object:[emptyView window]];
+}
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
-{
-  // Insert code here to initialize your application
+- (NSRect)statusItemFrame {
+  return [[[statusItem_ view] window] frame];
+}
+
+- (void)updateGameWindowFrame {
+  NSRect frame = [self statusItemFrame];
+  //frame.origin.y -= 10.0;
+  [gameWindow_ setFrame:frame display:YES animate:NO];
+}
+
+- (void)statusItemWindowDidMove:(NSNotification*)n {
+  [self updateGameWindowFrame];
 }
 
 @end
