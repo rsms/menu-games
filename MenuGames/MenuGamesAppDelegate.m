@@ -15,7 +15,8 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
   
   statusItem_ = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
-  NSView *emptyView = [[NSView alloc] initWithFrame:NSMakeRect(0.0, 0.0, 80.0, 22.0)];
+  NSView *emptyView =
+      [[NSView alloc] initWithFrame:NSMakeRect(0.0, 0.0, 50.0, 21.0)];
   [statusItem_ setView:emptyView];
   [statusItem_ retain];
   [statusItem_ setEnabled:YES];
@@ -45,7 +46,10 @@
 
 - (void)updateGameWindowFrame {
   NSRect frame = [self statusItemFrame];
-  //frame.origin.y -= 10.0;
+  // Remove menu bar shadow 1px
+  frame.origin.y += 1.0;
+  frame.size.height -= 1.0;
+  //NSLog(@"frame.size.height %f", frame.size.height);
   [gameWindow_ setFrame:frame display:YES animate:NO];
 }
 

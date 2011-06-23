@@ -43,8 +43,8 @@
 // Constants
 static const CGFloat friction = 0.1;
 static const CGFloat velocityPow = 0.05;
-static const CGFloat edgeToBarMargin = 5.0;
 static const NSSize barSize = {2.0, 6.0};
+static const CGFloat edgeToBarMargin = 7.0; // include barSize.width
 
 - (void)update {
 
@@ -84,7 +84,10 @@ static const NSSize barSize = {2.0, 6.0};
   NSSize size = bounds.size;
   
   [[NSColor colorWithCalibratedWhite:0.0 alpha:0.5] set];
-  [NSBezierPath strokeRect:bounds];
+  [NSBezierPath strokeLineFromPoint:NSMakePoint(0.0, 0.0)
+                            toPoint:NSMakePoint(0.0, size.height)];
+  [NSBezierPath strokeLineFromPoint:NSMakePoint(size.width, 0.0)
+                            toPoint:NSMakePoint(size.width, size.height)];
   
   NSRect padRect = NSMakeRect(size.width - edgeToBarMargin, y_,
                               barSize.width, barSize.height);
