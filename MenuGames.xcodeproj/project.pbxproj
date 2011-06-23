@@ -1,0 +1,285 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6A88C93213B2EEA300EC6CB2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A88C93113B2EEA200EC6CB2 /* Cocoa.framework */; };
+		6A88C93C13B2EEA300EC6CB2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6A88C93A13B2EEA300EC6CB2 /* InfoPlist.strings */; };
+		6A88C93F13B2EEA300EC6CB2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A88C93E13B2EEA300EC6CB2 /* main.m */; };
+		6A88C94213B2EEA300EC6CB2 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 6A88C94013B2EEA300EC6CB2 /* Credits.rtf */; };
+		6A88C94513B2EEA300EC6CB2 /* MenuGamesAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A88C94413B2EEA300EC6CB2 /* MenuGamesAppDelegate.m */; };
+		6A88C94813B2EEA300EC6CB2 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A88C94613B2EEA300EC6CB2 /* MainMenu.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		6A88C92D13B2EEA200EC6CB2 /* MenuGames.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MenuGames.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6A88C93113B2EEA200EC6CB2 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		6A88C93413B2EEA300EC6CB2 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		6A88C93513B2EEA300EC6CB2 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		6A88C93613B2EEA300EC6CB2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		6A88C93913B2EEA300EC6CB2 /* MenuGames-Info.plist */ = {isa = PBXFileReference; path = "MenuGames-Info.plist"; sourceTree = "<group>"; };
+		6A88C93B13B2EEA300EC6CB2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		6A88C93D13B2EEA300EC6CB2 /* MenuGames-Prefix.pch */ = {isa = PBXFileReference; path = "MenuGames-Prefix.pch"; sourceTree = "<group>"; };
+		6A88C93E13B2EEA300EC6CB2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		6A88C94113B2EEA300EC6CB2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		6A88C94313B2EEA300EC6CB2 /* MenuGamesAppDelegate.h */ = {isa = PBXFileReference; path = MenuGamesAppDelegate.h; sourceTree = "<group>"; };
+		6A88C94413B2EEA300EC6CB2 /* MenuGamesAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MenuGamesAppDelegate.m; sourceTree = "<group>"; };
+		6A88C94713B2EEA300EC6CB2 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6A88C92A13B2EEA200EC6CB2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6A88C93213B2EEA300EC6CB2 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6A88C92213B2EEA200EC6CB2 = {
+			isa = PBXGroup;
+			children = (
+				6A88C93713B2EEA300EC6CB2 /* MenuGames */,
+				6A88C93013B2EEA200EC6CB2 /* Frameworks */,
+				6A88C92E13B2EEA200EC6CB2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6A88C92E13B2EEA200EC6CB2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6A88C92D13B2EEA200EC6CB2 /* MenuGames.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6A88C93013B2EEA200EC6CB2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6A88C93113B2EEA200EC6CB2 /* Cocoa.framework */,
+				6A88C93313B2EEA300EC6CB2 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6A88C93313B2EEA300EC6CB2 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6A88C93413B2EEA300EC6CB2 /* AppKit.framework */,
+				6A88C93513B2EEA300EC6CB2 /* CoreData.framework */,
+				6A88C93613B2EEA300EC6CB2 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		6A88C93713B2EEA300EC6CB2 /* MenuGames */ = {
+			isa = PBXGroup;
+			children = (
+				6A88C94313B2EEA300EC6CB2 /* MenuGamesAppDelegate.h */,
+				6A88C94413B2EEA300EC6CB2 /* MenuGamesAppDelegate.m */,
+				6A88C94613B2EEA300EC6CB2 /* MainMenu.xib */,
+				6A88C93813B2EEA300EC6CB2 /* Supporting Files */,
+			);
+			path = MenuGames;
+			sourceTree = "<group>";
+		};
+		6A88C93813B2EEA300EC6CB2 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				6A88C93913B2EEA300EC6CB2 /* MenuGames-Info.plist */,
+				6A88C93A13B2EEA300EC6CB2 /* InfoPlist.strings */,
+				6A88C93D13B2EEA300EC6CB2 /* MenuGames-Prefix.pch */,
+				6A88C93E13B2EEA300EC6CB2 /* main.m */,
+				6A88C94013B2EEA300EC6CB2 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6A88C92C13B2EEA200EC6CB2 /* MenuGames */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6A88C94B13B2EEA300EC6CB2 /* Build configuration list for PBXNativeTarget "MenuGames" */;
+			buildPhases = (
+				6A88C92913B2EEA200EC6CB2 /* Sources */,
+				6A88C92A13B2EEA200EC6CB2 /* Frameworks */,
+				6A88C92B13B2EEA200EC6CB2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MenuGames;
+			productName = MenuGames;
+			productReference = 6A88C92D13B2EEA200EC6CB2 /* MenuGames.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6A88C92413B2EEA200EC6CB2 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 6A88C92713B2EEA200EC6CB2 /* Build configuration list for PBXProject "MenuGames" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 6A88C92213B2EEA200EC6CB2;
+			productRefGroup = 6A88C92E13B2EEA200EC6CB2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6A88C92C13B2EEA200EC6CB2 /* MenuGames */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6A88C92B13B2EEA200EC6CB2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6A88C93C13B2EEA300EC6CB2 /* InfoPlist.strings in Resources */,
+				6A88C94213B2EEA300EC6CB2 /* Credits.rtf in Resources */,
+				6A88C94813B2EEA300EC6CB2 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6A88C92913B2EEA200EC6CB2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6A88C93F13B2EEA300EC6CB2 /* main.m in Sources */,
+				6A88C94513B2EEA300EC6CB2 /* MenuGamesAppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		6A88C93A13B2EEA300EC6CB2 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6A88C93B13B2EEA300EC6CB2 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		6A88C94013B2EEA300EC6CB2 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6A88C94113B2EEA300EC6CB2 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		6A88C94613B2EEA300EC6CB2 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6A88C94713B2EEA300EC6CB2 /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		6A88C94913B2EEA300EC6CB2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		6A88C94A13B2EEA300EC6CB2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		6A88C94C13B2EEA300EC6CB2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MenuGames/MenuGames-Prefix.pch";
+				INFOPLIST_FILE = "MenuGames/MenuGames-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		6A88C94D13B2EEA300EC6CB2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MenuGames/MenuGames-Prefix.pch";
+				INFOPLIST_FILE = "MenuGames/MenuGames-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6A88C92713B2EEA200EC6CB2 /* Build configuration list for PBXProject "MenuGames" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6A88C94913B2EEA300EC6CB2 /* Debug */,
+				6A88C94A13B2EEA300EC6CB2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6A88C94B13B2EEA300EC6CB2 /* Build configuration list for PBXNativeTarget "MenuGames" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6A88C94C13B2EEA300EC6CB2 /* Debug */,
+				6A88C94D13B2EEA300EC6CB2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6A88C92413B2EEA200EC6CB2 /* Project object */;
+}
