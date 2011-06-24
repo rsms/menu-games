@@ -12,6 +12,12 @@
 #include <mach/mach_time.h>
 #import "MGPongBallLayer.h"
 
+// Constants
+static const CGFloat friction = 0.1;
+static const CGFloat velocityPow = 0.05;
+static const NSSize barSize = {2.0, 6.0};
+static const CGFloat edgeToBarMargin = 5.0;
+
 
 @implementation MGPongView
 
@@ -35,17 +41,18 @@
   self.layer.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 0.1);
   self.layer.contentsGravity = kCAGravityTopLeft;
   
-  // setup right-hand side player bar
-  rightPlayerBar_ = [CALayer layer];
-  rightPlayerBar_.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 1.0);
-  rightPlayerBar_.frame = CGRectMake(10.0, 0.0, 2.0, 6.0);
-  [self.layer addSublayer:rightPlayerBar_];
-  
   // setup left-hand side player bar
   leftPlayerBar_ = [CALayer layer];
   leftPlayerBar_.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 1.0);
-  leftPlayerBar_.frame = CGRectMake(0.0, 0.0, 2.0, 6.0);
+  leftPlayerBar_.frame = CGRectMake(edgeToBarMargin, 0.0, barSize.width,
+                                    barSize.height);
   [self.layer addSublayer:leftPlayerBar_];
+  
+  // setup right-hand side player bar
+  rightPlayerBar_ = [CALayer layer];
+  rightPlayerBar_.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 1.0);
+  rightPlayerBar_.frame = CGRectMake(10.0, 0.0, barSize.width, barSize.height);
+  [self.layer addSublayer:rightPlayerBar_];
   
   // setup ball
   ball_ = [MGPongBallLayer layer];
@@ -89,21 +96,17 @@
   [super dealloc];
 }
 
-
 - (void)setFrame:(NSRect)frame {
   if (baseSize_.width == 0.0) {
-    // Record base size
+    // Setup initial frames and stuff
     baseSize_ = frame.size;
+    rightPlayerBar_.frame =
+        CGRectMake(frame.size.width - barSize.width - edgeToBarMargin, 0.0,
+                   barSize.width, barSize.height);
   }
   [super setFrame:frame];
 }
 
-
-// Constants
-static const CGFloat friction = 0.1;
-static const CGFloat velocityPow = 0.05;
-static const NSSize barSize = {2.0, 6.0};
-static const CGFloat edgeToBarMargin = 7.0; // include barSize.width
 
 - (BOOL)updateWithTimeInterval:(NSTimeInterval)timeInterval {
   /*x += timeInterval * speed * cos(trajectory);
