@@ -54,29 +54,33 @@
   ball_.contentsGravity = kCAGravityCenter;
   ball_.frame = CGRectMake(30.0, 10.0, 4.0, 4.0);
   [self.layer addSublayer:ball_];
-  
-  // set up main timer
-  /*NSMethodSignature *aSignature = 
-      [isa instanceMethodSignatureForSelector:@selector(update)];
-  NSInvocation *timerInvocation =
-      [NSInvocation invocationWithMethodSignature:aSignature];
-  [timerInvocation setSelector:@selector(update)];
-  [timerInvocation setTarget:self];
-  updateTimer_ = [NSTimer scheduledTimerWithTimeInterval:1.0 / 60.0
-                                              invocation:timerInvocation
-                                                 repeats:YES];
-  [updateTimer_ retain];*/
 
   // pause icon up in this bitch
   [self setWantsLayer:YES];
   NSImage *pauseImage = [NSImage imageNamed:@"Pause"];
   pauseIcon_ = [CALayer layer];
   pauseIcon_.contents = pauseImage;
-  pauseIcon_.autoresizingMask =  kCALayerMinXMargin | kCALayerMaxXMargin | kCALayerMinYMargin | kCALayerMaxYMargin;
+  pauseIcon_.autoresizingMask = kCALayerMinXMargin
+                              | kCALayerMaxXMargin
+                              | kCALayerMinYMargin
+                              | kCALayerMaxYMargin;
   pauseIcon_.contentsGravity = kCAGravityLeft;
-  pauseIcon_.bounds = NSMakeRect(0, 0, pauseImage.size.width, pauseImage.size.height);
+  pauseIcon_.bounds = NSMakeRect(0, 0, pauseImage.size.width,
+                                 pauseImage.size.height);
   pauseIcon_.opacity = 0;
   [self.layer addSublayer:pauseIcon_];
+  
+  // set up main timer
+  /*NSMethodSignature *aSignature = 
+   [isa instanceMethodSignatureForSelector:@selector(update)];
+   NSInvocation *timerInvocation =
+   [NSInvocation invocationWithMethodSignature:aSignature];
+   [timerInvocation setSelector:@selector(update)];
+   [timerInvocation setTarget:self];
+   updateTimer_ = [NSTimer scheduledTimerWithTimeInterval:1.0 / 60.0
+   invocation:timerInvocation
+   repeats:YES];
+   [updateTimer_ retain];*/
   
   return self;
 }
