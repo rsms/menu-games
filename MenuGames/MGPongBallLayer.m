@@ -15,43 +15,26 @@
   self = [super init];
   if (self) {
     // Initialization code here.
-    self.contentsGravity = kCAGravityCenter;
-    self.backgroundColor = CGColorCreateGenericRGB(1.0, 0.0, 0.0, 1.0);
-    self.cornerRadius = 20.0;
   }
   return self;
 }
+
 
 - (void)dealloc {
   [super dealloc];
 }
 
-- (void)display {
-  // check the value of the layer's state key
-  //if (self.state) {
-    // meh...
-  //}
+
+- (CGFloat)targetYPosition {
+  return self.position.y;
 }
 
 
-/*- (void)drawInContext:(CGContextRef)theContext {
-  CGMutablePathRef thePath = CGPathCreateMutable();
-  
-  CGPathMoveToPoint(thePath, NULL, 15.0, 15.0);
-  CGPathAddCurveToPoint(thePath,
-                        NULL,
-                        15.f,250.0f,
-                        295.0f,250.0f,
-                        295.0f,15.0f);
-  
-  CGContextBeginPath(theContext);
-  CGContextAddPath(theContext, thePath );
-  
-  CGContextSetLineWidth(theContext, 2.0);
-  CGContextSetStrokeColorWithColor(theContext,
-                                   self.lineColor);
-  CGContextStrokePath(theContext);
-  CFRelease(thePath);
-}*/
+- (void)setTargetYPosition:(CGFloat)y {
+  CGPoint position = self.position;
+  position.y = y;
+  self.position = position;
+}
+
 
 @end

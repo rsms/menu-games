@@ -11,8 +11,8 @@
 
 
 @interface MGPongBallLayer : CALayer {
-@private
-    
 }
+
+@property (nonatomic) CGFloat targetYPosition;
 
 @end

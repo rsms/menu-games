@@ -7,23 +7,28 @@
 //
 
 #import <Cocoa/Cocoa.h>
-@class MGPongBallLayer;
+#import <QuartzCore/QuartzCore.h>
+
+@class MGPongBallLayer, MGPongPaddleLayer;
 
 @interface MGPongView : NSView <NSWindowDelegate> {
-  CGFloat velocity_;
-  CGFloat upVector_;
-  CGFloat downVector_;
-  CGFloat y_;
   NSSize baseSize_;
-  uint64_t timeOfLastUpdate_;
-  NSTimer *updateTimer_;
   CALayer *pauseIcon_;
   MGPongBallLayer *ball_;
-  CALayer *rightPlayerBar_;
-  CALayer *leftPlayerBar_;
+  MGPongPaddleLayer *rightPaddle_;
+  MGPongPaddleLayer *leftPaddle_;
+  __weak MGPongPaddleLayer *localPlayerPaddle_;
+  BOOL upKeyPressed_;
+  BOOL downKeyPressed_;
+  BOOL waitingToStartGame_;
 }
 
 - (void)toggleFullscreen:(id)sender;
-- (BOOL)updateWithTimeInterval:(NSTimeInterval)timeInterval;
+- (void)resetGame:(id)sender;
+- (void)startGame:(id)sender;
+
+- (void)paddle:(MGPongPaddleLayer*)paddle
+destinationChangedFrom:(CGFloat)startYPosition
+  withDuration:(CFTimeInterval)duration;
 
 @end
