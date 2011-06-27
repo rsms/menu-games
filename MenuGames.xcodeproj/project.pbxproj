@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6A1A51E513B7D39100D696EB /* MGPeriodicTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A1A51E413B7D39100D696EB /* MGPeriodicTimer.m */; };
 		6A6D2FD513B3A45F00C1ED12 /* MGPongBallLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A6D2FD413B3A45F00C1ED12 /* MGPongBallLayer.m */; };
 		6A6D2FFC13B3A71A00C1ED12 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A6D2FFB13B3A71A00C1ED12 /* QuartzCore.framework */; };
 		6A88C93213B2EEA300EC6CB2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A88C93113B2EEA200EC6CB2 /* Cocoa.framework */; };
@@ -23,6 +24,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6A1A51E313B7D39100D696EB /* MGPeriodicTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGPeriodicTimer.h; sourceTree = "<group>"; };
+		6A1A51E413B7D39100D696EB /* MGPeriodicTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGPeriodicTimer.m; sourceTree = "<group>"; };
+		6A1A51E713B7D4DE00D696EB /* MGPeriodicTimerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGPeriodicTimerDelegate.h; sourceTree = "<group>"; };
 		6A6D2FD313B3A45F00C1ED12 /* MGPongBallLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGPongBallLayer.h; sourceTree = "<group>"; };
 		6A6D2FD413B3A45F00C1ED12 /* MGPongBallLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGPongBallLayer.m; sourceTree = "<group>"; };
 		6A6D2FFB13B3A71A00C1ED12 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -104,6 +108,9 @@
 		6A88C93713B2EEA300EC6CB2 /* MenuGames */ = {
 			isa = PBXGroup;
 			children = (
+				6A1A51E313B7D39100D696EB /* MGPeriodicTimer.h */,
+				6A1A51E413B7D39100D696EB /* MGPeriodicTimer.m */,
+				6A1A51E713B7D4DE00D696EB /* MGPeriodicTimerDelegate.h */,
 				6A88C94313B2EEA300EC6CB2 /* MenuGamesAppDelegate.h */,
 				6A88C94413B2EEA300EC6CB2 /* MenuGamesAppDelegate.m */,
 				6A88C96113B2FC7A00EC6CB2 /* MGGameWindow.h */,
@@ -200,6 +207,7 @@
 				6A88C96313B2FC7A00EC6CB2 /* MGGameWindow.m in Sources */,
 				6A6D2FD513B3A45F00C1ED12 /* MGPongBallLayer.m in Sources */,
 				6AD5A04D13B6CC19009EAEA7 /* MGPongPaddleLayer.m in Sources */,
+				6A1A51E513B7D39100D696EB /* MGPeriodicTimer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

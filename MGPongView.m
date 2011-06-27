@@ -12,14 +12,21 @@
 #include <math.h>
 #import "MGPongBallLayer.h"
 #import "MGPongPaddleLayer.h"
+#import "MGPeriodicTimer.h"
 
 // Constants
 static const NSSize kPaddleSize = {2.0, 6.0};
 static const CGFloat kEdgeToPaddleMargin = 5.0;
 static const CGFloat kBallRadius = 2.0;
 
+@interface MGPongView (Private)
+- (void)update;
+@end
+
 
 @implementation MGPongView
+
+@synthesize rightPaddle = rightPaddle_, leftPaddle = leftPaddle_;
 
 - (id)initWithFrame:(NSRect)frame {
   self = [super initWithFrame:frame];
@@ -60,6 +67,7 @@ static const CGFloat kBallRadius = 2.0;
   ball_.cornerRadius = 2.0;
   ball_.contentsGravity = kCAGravityCenter;
   ball_.frame = CGRectMake(30.0, 10.0, kBallRadius*2.0, kBallRadius*2.0);
+  ball_.gameView = self;
   [self.layer addSublayer:ball_];
 
   // pause icon up in this bitch
@@ -75,6 +83,13 @@ static const CGFloat kBallRadius = 2.0;
                                  pauseImage.size.height);
   pauseIcon_.opacity = 0;
   [self.layer addSublayer:pauseIcon_];
+  
+  // Animation timer
+  //animationTimer_ = [[MGPeriodicTimer alloc] initWithInterval:1.0/60.0];
+  //animationTimer_.delegate = self;
+  //[animationTimer_ start];
+  [self resumeUpdating];
+  
     
   return self;
 }
@@ -82,6 +97,45 @@ static const CGFloat kBallRadius = 2.0;
 
 - (void)dealloc {
   [super dealloc];
+}
+
+
+- (void)resumeUpdating {
+  if (animationTimer_)
+    return;
+  NSMethodSignature *sig = 
+      [isa instanceMethodSignatureForSelector:@selector(update)];
+  NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
+  [inv setSelector:@selector(update)];
+  [inv setTarget:self];
+  timeOfLastUpdate_ = mach_absolute_time();
+  animationTimer_ = [NSTimer scheduledTimerWithTimeInterval:1.0 / 60.0
+                                              invocation:inv
+                                                 repeats:YES];
+  [animationTimer_ retain];
+}
+
+
+- (void)pauseUpdating {
+  if (!animationTimer_)
+    return;
+  [animationTimer_ invalidate];
+  [animationTimer_ release];
+  animationTimer_ = nil;
+}
+
+
+- (void)update {
+  // Calculate period
+  uint64_t timeNow = mach_absolute_time();
+  mach_timebase_info_data_t info;
+  mach_timebase_info(&info);
+  NSTimeInterval period = ((double)((timeNow - timeOfLastUpdate_)
+                                    * info.numer / info.denom)) / 1000000000.0;
+  timeOfLastUpdate_ = timeNow;
+  
+  // Update ball
+  [ball_ update:period];
 }
 
 
@@ -148,6 +202,7 @@ destinationChangedFrom:(CGFloat)startYPosition
 - (void)startGame:(id)sender {
   // Triggered at first user interaction after the game was reset
   waitingToStartGame_ = NO;
+  return;
 
   
   // Ball animation
@@ -178,8 +233,8 @@ destinationChangedFrom:(CGFloat)startYPosition
   
   CGPoint position = ball_.position;
   CGFloat currentX = ((CALayer *)ball_.presentationLayer).position.x;
-  CGFloat leftPaddleX =
-      leftPaddle_.position.x + leftPaddle_.frame.size.width - kBallRadius;
+  //CGFloat leftPaddleX =
+  //    leftPaddle_.position.x + leftPaddle_.frame.size.width - kBallRadius;
   CGFloat rightPaddleX = rightPaddle_.position.x - kBallRadius;
   
   CGFloat targetX = rightPaddleX;
