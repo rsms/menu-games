@@ -14,9 +14,8 @@
 @interface MGPongBallLayer : CALayer {
   MGPongView *gameView_;
   CGFloat speed_;
-  CGFloat direction_; // degrees 0-360
-  CGFloat directionX_;
-  CGFloat directionY_;
+  CGFloat startSpeed_;
+  CGPoint velocity_;
 }
 
 @property (retain) MGPongView *gameView;
