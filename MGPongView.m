@@ -88,7 +88,7 @@ static const CGFloat kBallRadius = 2.0;
   //animationTimer_ = [[MGPeriodicTimer alloc] initWithInterval:1.0/60.0];
   //animationTimer_.delegate = self;
   //[animationTimer_ start];
-  [self resumeUpdating];
+  //[self resumeUpdating];
   
     
   return self;
@@ -191,9 +191,11 @@ destinationChangedFrom:(CGFloat)startYPosition
       CGRectMake((currentSize.width / 2.0) - kBallRadius,
                  (currentSize.height / 2.0) - kBallRadius,
                  kBallRadius*2.0, kBallRadius*2.0);
+  [ball_ reset];
   
   // Now waiting for a player to move in order to start the game
   waitingToStartGame_ = YES;
+  [self pauseUpdating];
   
   [CATransaction commit];
 }
@@ -202,6 +204,7 @@ destinationChangedFrom:(CGFloat)startYPosition
 - (void)startGame:(id)sender {
   // Triggered at first user interaction after the game was reset
   waitingToStartGame_ = NO;
+  [self resumeUpdating];
   return;
 
   
@@ -409,10 +412,12 @@ destinationChangedFrom:(CGFloat)startYPosition
 }
 
 - (void)windowDidBecomeKey:(NSNotification *)notification {
+  waitingToStartGame_ = YES; // resume updating at first user interaction
   pauseIcon_.opacity = 0;
 }
 
 - (void)windowDidResignKey:(NSNotification *)notification {
+  [self pauseUpdating];
   pauseIcon_.opacity = 1;
 }
 

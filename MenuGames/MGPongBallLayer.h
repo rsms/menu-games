@@ -21,5 +21,6 @@
 @property (retain) MGPongView *gameView;
 
 - (void)update:(NSTimeInterval)period;
+- (void)reset;
 
 @end
