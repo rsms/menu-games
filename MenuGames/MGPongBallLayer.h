@@ -13,8 +13,6 @@
 
 @interface MGPongBallLayer : CALayer {
   MGPongView *gameView_;
-  CGFloat speed_;
-  CGFloat startSpeed_;
   CGPoint velocity_;
 }
 

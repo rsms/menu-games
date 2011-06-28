@@ -13,6 +13,7 @@
 #import "MGPongBallLayer.h"
 #import "MGPongPaddleLayer.h"
 #import "MGPeriodicTimer.h"
+#import "MGPongPlayer.h"
 
 // Constants
 static const NSSize kPaddleSize = {2.0, 6.0};
@@ -37,6 +38,10 @@ static const CGFloat kBallRadius = 2.0;
   // Init base size
   baseSize_ = NSMakeSize(0.0, 0.0);
   
+  // Player objects
+  player1_ = [MGPongPlayer new];
+  player2_ = [MGPongPlayer new];
+  
   // setup background
   self.layer = [self makeBackingLayer];
   self.layer.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 0.1);
@@ -50,6 +55,7 @@ static const CGFloat kBallRadius = 2.0;
   leftPaddle_.gameView = self;
   // Note: Don't set delegate here or presentation layer metrics get messed up
   [self.layer addSublayer:leftPaddle_];
+  player1_.paddleLayer = leftPaddle_;
   
   // setup right-hand side player bar
   rightPaddle_ = [MGPongPaddleLayer layer];
@@ -57,8 +63,9 @@ static const CGFloat kBallRadius = 2.0;
   rightPaddle_.frame = CGRectMake(10.0, 0.0, kPaddleSize.width, kPaddleSize.height);
   rightPaddle_.gameView = self;
   [self.layer addSublayer:rightPaddle_];
+  player2_.paddleLayer = rightPaddle_;
   
-  // Local player is right-hand side
+  // Local player
   localPlayerPaddle_ = rightPaddle_;
   
   // setup ball
@@ -84,12 +91,10 @@ static const CGFloat kBallRadius = 2.0;
   pauseIcon_.opacity = 0;
   [self.layer addSublayer:pauseIcon_];
   
-  // Animation timer
-  //animationTimer_ = [[MGPeriodicTimer alloc] initWithInterval:1.0/60.0];
-  //animationTimer_.delegate = self;
-  //[animationTimer_ start];
-  //[self resumeUpdating];
-  
+  // Vertical divider in center
+  vDividerLayer_ = [CALayer layer];
+  vDividerLayer_.backgroundColor = CGColorCreateGenericGray(0.0, 0.2);
+  [self.layer addSublayer:vDividerLayer_];
     
   return self;
 }
@@ -142,13 +147,35 @@ static const CGFloat kBallRadius = 2.0;
 - (void)paddle:(MGPongPaddleLayer*)paddle
 destinationChangedFrom:(CGFloat)startYPosition
   withDuration:(CFTimeInterval)duration {
-  // TODO: calculate ball trajectory and check for collisions
-  NSLog(@"%@ moving from %f -> %f during %f seconds",
-        paddle, startYPosition, paddle.position.y, duration);
+  //NSLog(@"%@ moving from %f -> %f during %f seconds",
+  //      paddle, startYPosition, paddle.position.y, duration);
   
   if (waitingToStartGame_) {
     [self startGame:self];
   }
+}
+
+
+- (void)ballHitLeftWall:(MGPongBallLayer*)ball {
+  if (leftPaddle_ == player1_.paddleLayer) {
+    player1_.score = player1_.score - 0.2;
+  } else {
+    player2_.score = player2_.score - 0.2;
+  }
+  [self resetGame:self];
+  waitingToStartGame_ = NO;
+  [self performSelector:@selector(resetGame:) withObject:self afterDelay:0.5];
+}
+
+- (void)ballHitRightWall:(MGPongBallLayer*)ball {
+  if (rightPaddle_ == player1_.paddleLayer) {
+    player1_.score = player1_.score - 0.2;
+  } else {
+    player2_.score = player2_.score - 0.2;
+  }
+  [self resetGame:self];
+  waitingToStartGame_ = NO;
+  [self performSelector:@selector(resetGame:) withObject:self afterDelay:0.5];
 }
 
 
@@ -163,6 +190,10 @@ destinationChangedFrom:(CGFloat)startYPosition
   } else {
     [super setFrame:frame];
   }
+  
+  // Update vertical divider frame
+  vDividerLayer_.frame = CGRectMake(ceil(frame.size.width / 2.0), 0.0,
+                                    1.0, frame.size.height);
 }
 
 
@@ -205,154 +236,112 @@ destinationChangedFrom:(CGFloat)startYPosition
   // Triggered at first user interaction after the game was reset
   waitingToStartGame_ = NO;
   [self resumeUpdating];
-  return;
-
-  
-  // Ball animation
-  //
-  // |---------------------------|
-  // |                           |
-  // |             • 111111 2 33 |
-  // |                           |
-  // |---------------------------|
-  //
-  // Where 1 is the path we know won't collide with anything, 2 is where a
-  // collision occur or is avoided, 3 is the path after an avoided collision
-  //
-  /*CAKeyframeAnimation *ballAnim = [CAKeyframeAnimation animationWithKeyPath:@"position"];
-  CGMutablePathRef thePath = CGPathCreateMutable();
-  CGPathMoveToPoint(thePath,NULL,74.0,74.0);
-  CGPathAddCurveToPoint(thePath,NULL,74.0,500.0,
-                        320.0,500.0,
-                        320.0,74.0);
-  CGPathAddCurveToPoint(thePath,NULL,320.0,500.0,
-                        566.0,500.0,
-                        566.0,74.0);
-  ballAnim.path = thePath;*/
-  
-  
-  // Start ball animation
-  [CATransaction begin];
-  
-  CGPoint position = ball_.position;
-  CGFloat currentX = ((CALayer *)ball_.presentationLayer).position.x;
-  //CGFloat leftPaddleX =
-  //    leftPaddle_.position.x + leftPaddle_.frame.size.width - kBallRadius;
-  CGFloat rightPaddleX = rightPaddle_.position.x - kBallRadius;
-  
-  CGFloat targetX = rightPaddleX;
-  
-  // set duration depending on distance
-  CGFloat maxX = self.bounds.size.width;
-  static const CFTimeInterval baseDuration = 1.2; // seconds it takes to move 100%
-  CFTimeInterval duration = (currentX - targetX) / maxX;
-  if (duration < 0) duration = -duration;
-  duration *= baseDuration;
-  [CATransaction setAnimationDuration:duration];
-  
-  // Use linear movement
-  CAMediaTimingFunction *timingFunc =
-      [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-  [CATransaction setAnimationTimingFunction:timingFunc];
-  
-  // Check collision on completion
-  [CATransaction setCompletionBlock:^{
-    CGFloat ballY = ball_.position.y;
-    CGRect paddleFrame = rightPaddle_.presentationFrame;
-
-    if (ballY >= paddleFrame.origin.y &&
-        ballY < paddleFrame.origin.y + paddleFrame.size.height) {
-      NSLog(@">> hit");
-      //ball_.speed = ball_.speed * -1;
-    } else {
-      NSLog(@">> miss");
-    }
-  }];
-
-  position.x = targetX;
-  ball_.position = position;
-  
-  [CATransaction commit];
 }
 
 
-- (BOOL)updateWithTimeInterval:(NSTimeInterval)timeInterval {
-  /*x += timeInterval * speed * cos(trajectory);
-  y += timeInterval * speed * sin(trajectory);
-  
-  if (x > GAME_ASPECT + (0.5 + GAME_OBJECT_BOUNDARY_EXCESS) * width) {
-    x = -0.5 * width;
-  } else if (x < -(0.5 + GAME_OBJECT_BOUNDARY_EXCESS) * width) {
-    x = GAME_ASPECT + 0.5 * width;
-  }
-  
-  if (y > 1.0 + (0.5 + GAME_OBJECT_BOUNDARY_EXCESS) * height) {
-    y = -0.5 * height;
-  } else if (y < -(0.5 + GAME_OBJECT_BOUNDARY_EXCESS) * height) {
-    y = 1.0 + 0.5 * height;
-  }
-  */
-  return NO;
+- (MGPongPaddleLayer*)firstPlayerPaddle {
+  return localPlayerPaddle_;
+}
+
+
+- (MGPongPaddleLayer*)secondPlayerPaddle {
+  return (localPlayerPaddle_ == leftPaddle_) ? rightPaddle_ : leftPaddle_;
 }
 
 
 - (void)keyDown:(NSEvent *)ev {
-  switch (ev.keyCode) {
-    case 125: // down
-      localPlayerPaddle_.direction = 1;
-      //[localPlayerPaddle_ updateWithDirection:1];
-      downKeyPressed_ = YES;
+  unichar ch = [ev.charactersIgnoringModifiers characterAtIndex:0];
+  switch (ch) {
+    case NSUpArrowFunctionKey:
+      self.firstPlayerPaddle.direction = -1;
+      up1KeyPressed_ = YES;
+      return;
+    case NSDownArrowFunctionKey:
+      self.firstPlayerPaddle.direction = 1;
+      down1KeyPressed_ = YES;
+      return;
+    case 'w': // up for other player
+      up2KeyPressed_ = YES;
+      if (!remotePlayerPaddle_) {
+        self.secondPlayerPaddle.direction = -1;
+        return;
+      }
       break;
-    case 126: // up
-      localPlayerPaddle_.direction = -1;
-      //[localPlayerPaddle_ updateWithDirection:-1];
-      upKeyPressed_ = YES;
-      break;
-    case 3: // Cmd+F
-      if ([NSEvent modifierFlags] & NSCommandKeyMask) {
-        [self toggleFullscreen:self];
+    case 's': // down for other player
+      down2KeyPressed_ = YES;
+      if (!remotePlayerPaddle_) {
+        self.secondPlayerPaddle.direction = 1;
+        return;
       }
       break;
     default:
-      //NSLog(@"keyDown:%d", ev.keyCode);
+      //NSLog(@"keyDown:%d", ch);
       break;
   }
-  //NSLog(@"velocity_: %f", velocity_);
+  [super keyDown:ev];
 }
 
 
 - (void)keyUp:(NSEvent *)ev {
-  
-  if ([ev.charactersIgnoringModifiers hasPrefix:@"\033"]) { // esc
-    if ([self isInFullScreenMode]) {
-      // Exit fullscreen
-      [self toggleFullscreen:self];
-    }
-    return;
-  } else if ([ev.charactersIgnoringModifiers hasPrefix:@"r"]) {
-    [self resetGame:self];
-    return;
-  }
-  
-  switch (ev.keyCode) {
-    case 125: // down
-      downKeyPressed_ = NO;
-      if (localPlayerPaddle_.direction == 1) {
-        localPlayerPaddle_.direction = upKeyPressed_ ? -1 : 0;
-        //[localPlayerPaddle_ updateWithDirection:upKeyPressed_ ? -1 : 0];
+  MGPongPaddleLayer *paddle = nil;
+  unichar ch = [ev.charactersIgnoringModifiers characterAtIndex:0];
+  switch (ch) {
+    case NSUpArrowFunctionKey:
+      up1KeyPressed_ = NO;
+      paddle = self.firstPlayerPaddle;
+      if (paddle.direction == -1) {
+        paddle.direction = down1KeyPressed_ ? 1 : 0;
+      }
+      return;
+    case NSDownArrowFunctionKey:
+      down1KeyPressed_ = NO;
+      paddle = self.firstPlayerPaddle;
+      if (paddle.direction == 1) {
+        paddle.direction = up1KeyPressed_ ? -1 : 0;
+      }
+      return;
+    case 'w': // up for 2nd player
+      up2KeyPressed_ = NO;
+      if (!remotePlayerPaddle_) {
+        paddle = self.secondPlayerPaddle;
+        if (paddle.direction == -1) {
+          paddle.direction = down2KeyPressed_ ? 1 : 0;
+        }
+      }
+      return;
+    case 's': // down for 2nd player
+      down2KeyPressed_ = NO;
+      if (!remotePlayerPaddle_) {
+        paddle = self.secondPlayerPaddle;
+        if (paddle.direction == 1) {
+          paddle.direction = up2KeyPressed_ ? -1 : 0;
+        }
+      }
+      return;
+    case '\033': // ESC
+      if ([self isInFullScreenMode]) {
+        // Exit fullscreen
+        [self toggleFullscreen:self];
+        return;
       }
       break;
-    case 126: // up
-      upKeyPressed_ = NO;
-      if (localPlayerPaddle_.direction == -1) {
-        localPlayerPaddle_.direction = downKeyPressed_ ? 1 : 0;
-        //[localPlayerPaddle_ updateWithDirection:downKeyPressed_ ? 1 : 0];
+    case 'f': // Cmd+F = toggle fullscreen
+      if ([NSEvent modifierFlags] & NSCommandKeyMask) {
+        [self toggleFullscreen:self];
+        return;
+      }
+      break;
+    case 'r': // Cmd+F = reset game
+      if ([NSEvent modifierFlags] & NSCommandKeyMask) {
+        [self resetGame:self];
+        return;
       }
       break;
     default:
-      NSLog(@"keyUp:%d", ev.keyCode);
+      //NSLog(@"keyUp: %d", ch);
       break;
   }
+  [super keyUp:ev];
 }
 
 
@@ -388,7 +377,7 @@ destinationChangedFrom:(CGFloat)startYPosition
   
   // Scale
   [CATransaction begin];
-  [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+  [CATransaction setDisableActions:YES];
   self.layer.transform = CATransform3DMakeScale(scaleX, scaleY, 1.0);
   [CATransaction commit];
   [self setNeedsDisplay:YES];

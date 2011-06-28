@@ -60,7 +60,7 @@
     // Halt!
     CGFloat distanceTravelled = (previousY_ - position.y) / maxY;
     if (distanceTravelled < 0) distanceTravelled = -distanceTravelled;
-    NSLog(@"halt (distanceTravelled: %f)", distanceTravelled);
+    //NSLog(@"halt (distanceTravelled: %f)", distanceTravelled);
     static const CGFloat mass = 0.3;
     if (direction_ < 0) {
       position.y = MIN(maxY, position.y * (1.0 + (distanceTravelled * mass)));
@@ -70,10 +70,10 @@
   } else {
     // Set destination
     if (direction > 0) { // down
-      NSLog(@"down");
+      //NSLog(@"down");
       position.y = minY;
     } else { // up
-      NSLog(@"up");
+      //NSLog(@"up");
       position.y = maxY;
     }
   }
@@ -86,7 +86,7 @@
   //duration = 1.0;
   [CATransaction setAnimationDuration:duration];
   
-  NSLog(@"position.y = %f\n-----", position.y);
+  //NSLog(@"position.y = %f\n-----", position.y);
   
   self.position = position;
   
