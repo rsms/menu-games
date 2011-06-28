@@ -12,15 +12,9 @@
 @class MGPongPaddleLayer;
 
 @interface MGPongPlayer : NSObject {
-  CGFloat score_;
-  CALayer *scoreLayer_;
   MGPongPaddleLayer *paddleLayer_;
-  BOOL isRightPlayer_;
 }
 
-@property (assign) CGFloat score;
 @property (retain, nonatomic) MGPongPaddleLayer *paddleLayer;
-
-- (void)updateScoreLayer;
 
 @end

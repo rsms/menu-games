@@ -39,10 +39,10 @@ static CGPoint cp_norm(const CGPoint v) {
 	return cp_mul(v, 1.0 / cp_len(v));
 }
 static CGFloat deg2rad(const CGFloat degrees) {
-  return (M_PI / 180) * degrees;
+  return degrees * (M_PI / 180);
 }
 static CGFloat rad2deg(const CGFloat radians) {
-  return radians * 180 / M_PI;
+  return radians * (180 / M_PI);
 }
 
 
@@ -53,7 +53,7 @@ static CGFloat rad2deg(const CGFloat radians) {
 - (id)init {
   self = [super init];
   if (self) {
-    [self reset];
+    [self resetBasedOnCurrentScore:0.0];
   }
   return self;
 }
@@ -64,67 +64,65 @@ static CGFloat rad2deg(const CGFloat radians) {
 }
 
 
-- (void)reset {
+- (void)resetBasedOnCurrentScore:(CGFloat)score {
   // How far the ball moves during 1 second:
   const CGFloat speed = 30.0;
   
   // Initial angle
-  const CGFloat radians = 0.0;
+  CGFloat radians;
+  if (score < 0.01 && score > -0.01) {
+    // Totally random who gets the ball
+    radians = ((CGFloat)random() / RAND_MAX) * (M_PI * 2);
+    score = 0.0;
+  } else if (score < 0.0) {
+    // Right player shoots the ball
+    const CGFloat minAngle = 2.1;
+    const CGFloat maxAngle = 4.2;
+    radians = (((CGFloat)random() / RAND_MAX) * (maxAngle - minAngle)) + minAngle;
+  } else {
+    // Left player shoots the ball
+    const CGFloat minAngle = 1.05;
+    const CGFloat maxAngle = 5.25;
+    radians = (((CGFloat)random() / RAND_MAX) * (maxAngle + minAngle));
+    if (radians > maxAngle)
+      radians -= maxAngle;
+  }
+  
+  // Clamp the angle so the ball has an interesting starting vector
+  const CGFloat kRadians60deg = 1.0471975512;
+  const CGFloat kRadians120deg = 2.0943951024;
+  const CGFloat kRadians240deg = 4.1887902048;
+  const CGFloat kRadians300deg = 5.2359877560;
+  
+  if (radians < kRadians120deg && radians > kRadians60deg) {
+    NSLog(@"clamped radians to outside 60-120");
+    if (score < 0.0) { // Right player shoots
+      radians = kRadians120deg;
+    } else if (score > 0.0) { // Left player shoots
+      radians = kRadians60deg;
+    } else if ((kRadians120deg - radians) < (kRadians60deg - radians)) {
+      radians = kRadians120deg;
+    } else {
+      radians = kRadians60deg;
+    }
+  } else if (radians < kRadians300deg && radians > kRadians240deg) {
+    NSLog(@"clamped radians to outside 240-300");
+    if (score < 0.0) { // Right player shoots
+      NSLog(@"R player shoots -- 240 deg");
+      radians = kRadians240deg;
+    } else if (score > 0.0) { // Left player shoots
+      NSLog(@"L player shoots -- 300 deg");
+      radians = kRadians300deg;
+    } else if ((kRadians300deg - radians) < (kRadians240deg - radians)) {
+      radians = kRadians300deg;
+    } else {
+      radians = kRadians240deg;
+    }
+  }
   velocity_.x = speed * cos(radians);
   velocity_.y = speed * sin(radians);
 }
 
-
-/*- (BOOL)collideWithPaddle:(MGPongPaddleLayer*)paddle
-                ballFrame:(CGRect)ballFrame
-                dampening:(CGFloat)dampening {
-  // Check for paddle collisions
-  if (!CGRectIntersectsRect(ballFrame, paddle.frame))
-    return NO;
-
-  CGPoint ballCenter =
-      CP((ballFrame.origin.x - (ballFrame.size.width / 2.0)),
-         (ballFrame.origin.y - (ballFrame.size.height / 2.0)) );
-  CGPoint paddleCenter =
-      CP((paddle.frame.origin.x - (paddle.frame.size.width / 2.0)),
-         ballFrame.origin.y - (paddle.frame.size.width / 2.0));
-  CGFloat ballRadius = ballFrame.size.height / 2.0;
-  CGFloat paddleRadius = paddle.frame.size.width / 2.0;
-  
-  // get the mtd
-  CGPoint delta = dampening > 0.0 ? cp_add(ballCenter, paddleCenter)
-                                  : cp_sub(ballCenter, paddleCenter);
-  CGFloat d = cp_len(delta);
-  // minimum translation distance to push balls apart after intersecting
-  CGPoint mtd = cp_mul(delta, ((ballRadius + paddleRadius)-d)/d); 
-  
-  
-  // resolve intersection --
-  // inverse mass quantities
-  //CGFloat im1 = 1.0; //1.0 / ballMass;
-  //CGFloat im2 = 1.0; //1.0 / paddleMass;
-  
-  // push-pull them apart based off their mass
-  CGPoint newBallCenter = cp_sub(ballCenter, mtd);
-  self.position = newBallCenter;
-  
-  // impact speed
-  CGFloat vn = cp_dot(velocity_, cp_norm(mtd));
-  
-  // sphere intersecting but moving away from each other already
-  if (vn > 0.0) return YES;
-  
-  // collision impulse
-  static const CGFloat kRestitution = 0.8f;
-  CGFloat i = (-(1.0f + kRestitution) * vn); // (im1 + im2);
-  CGPoint impulse = cp_mul(mtd, i);
-  
-  // change in momentum
-  velocity_ = cp_add(velocity_, impulse);
-  //ball.velocity = ball.velocity.subtract(impulse.multiply(im2));
-  
-  return YES;
-}*/
 
 
 - (BOOL)collideWithPaddle:(MGPongPaddleLayer*)paddle
@@ -197,16 +195,26 @@ static CGFloat rad2deg(const CGFloat radians) {
 }
 
 
+- (CGPoint)positionInFuture:(NSTimeInterval)period {
+  CGPoint ballPos = self.position;
+  ballPos.x += period * velocity_.x;
+  ballPos.y += period * velocity_.y;
+  return ballPos;
+}
+
+
 - (void)update:(NSTimeInterval)period {
   [CATransaction begin];
   [CATransaction setDisableActions:YES];
   
-  // The ball's visual frame
+  // The ball's visual frame and position (center point)
   CGRect frame = self.frame;
+  CGPoint ballPos = self.position;
   
   // Advance the ball
-  frame.origin.x += period * velocity_.x;
-  frame.origin.y += period * velocity_.y;
+  ballPos.x += period * velocity_.x;
+  ballPos.y += period * velocity_.y;
+  self.position = ballPos;
   
   MGPongPaddleLayer *rightPaddle = gameView_.rightPaddle;
   MGPongPaddleLayer *leftPaddle = gameView_.leftPaddle;
@@ -215,20 +223,25 @@ static CGFloat rad2deg(const CGFloat radians) {
   if ([self collideWithPaddle:rightPaddle ballFrame:frame isLeftPaddle:NO]) {
     // ok, hit right paddle. Trigger some event or something in the future
     NSLog(@"hit right paddle");
-    frame.origin.x += period * velocity_.x;
-    frame.origin.y += period * velocity_.y;
+    ballPos.x += period * velocity_.x;
+    ballPos.y += period * velocity_.y;
+    self.position = ballPos;
   } else if ([self collideWithPaddle:leftPaddle ballFrame:frame isLeftPaddle:YES]) {
     // ok, hit left paddle. Trigger some event or something in the future
     NSLog(@"hit left paddle");
-    frame.origin.x += period * velocity_.x;
-    frame.origin.y += period * velocity_.y;
+    ballPos.x += period * velocity_.x;
+    ballPos.y += period * velocity_.y;
+    self.position = ballPos;
   } else {
     // Check for wall collisions
+    frame = self.frame;
     CGRect gameBounds = rightPaddle.superlayer.bounds;
+    BOOL checkCornerCollision = NO;
     if (frame.origin.y + frame.size.height > gameBounds.size.height) {
       // top wall
       frame.origin.y = gameBounds.size.height - frame.size.height;
       velocity_.y = -velocity_.y;
+      checkCornerCollision = YES;
     } else if (frame.origin.x + frame.size.width > gameBounds.size.width) {
       // right wall
       frame.origin.x = gameBounds.size.width - frame.size.width;
@@ -238,15 +251,29 @@ static CGFloat rad2deg(const CGFloat radians) {
       // bottom wall
       frame.origin.y = 0.0;
       velocity_.y = -velocity_.y;
+      checkCornerCollision = YES;
     } else if (frame.origin.x < 0.0) {
       // left wall
       frame.origin.x = 0;
       velocity_.x = -velocity_.x;
       [gameView_ ballHitLeftWall:self];
     }
+    
+    if (checkCornerCollision) {
+      // Handle corner collisions
+      if (frame.origin.x + frame.size.width >
+          gameBounds.size.width - frame.size.width) {
+        velocity_.x = -velocity_.x;
+        [gameView_ ballHitRightWall:self];
+      } else if (frame.origin.x < frame.size.width) {
+        velocity_.x = -velocity_.x;
+        [gameView_ ballHitLeftWall:self];
+      }
+    }
+    
+    self.frame = frame;
   }
   
-  self.frame = frame;
   [CATransaction commit];
 }
 

@@ -18,7 +18,9 @@
 
 @property (retain) MGPongView *gameView;
 
+- (CGPoint)positionInFuture:(NSTimeInterval)period;
+
 - (void)update:(NSTimeInterval)period;
-- (void)reset;
+- (void)resetBasedOnCurrentScore:(CGFloat)score;
 
 @end

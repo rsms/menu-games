@@ -27,7 +27,8 @@ static const CGFloat kBallRadius = 2.0;
 
 @implementation MGPongView
 
-@synthesize rightPaddle = rightPaddle_, leftPaddle = leftPaddle_;
+@synthesize rightPaddle = rightPaddle_,
+            leftPaddle = leftPaddle_;
 
 - (id)initWithFrame:(NSRect)frame {
   self = [super initWithFrame:frame];
@@ -44,13 +45,26 @@ static const CGFloat kBallRadius = 2.0;
   
   // setup background
   self.layer = [self makeBackingLayer];
-  self.layer.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 0.1);
+  //self.layer.backgroundColor = CGColorCreateGenericGray(0.0, 0.05);
   self.layer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
   self.layer.contentsGravity = kCAGravityTopLeft;
   
+  // Vertical divider in center
+  vDividerLayer_ = [CALayer layer];
+  vDividerLayer_.backgroundColor = CGColorCreateGenericGray(0.0, 0.15);
+  [self.layer addSublayer:vDividerLayer_];
+  
+  // Left and right border dividers
+  leftDividerLayer_ = [CALayer layer];
+  rightDividerLayer_ = [CALayer layer];
+  leftDividerLayer_.backgroundColor = CGColorCreateGenericGray(0.0, 0.3);
+  rightDividerLayer_.backgroundColor = leftDividerLayer_.backgroundColor;
+  [self.layer addSublayer:leftDividerLayer_];
+  [self.layer addSublayer:rightDividerLayer_];
+  
   // setup left-hand side player bar
   leftPaddle_ = [MGPongPaddleLayer layer];
-  leftPaddle_.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 1.0);
+  leftPaddle_.backgroundColor = CGColorCreateGenericRGB(0.0, 0.45, 0.74, 1.0);
   leftPaddle_.frame = CGRectMake(0.0, 0.0, kPaddleSize.width, kPaddleSize.height);
   leftPaddle_.gameView = self;
   // Note: Don't set delegate here or presentation layer metrics get messed up
@@ -59,7 +73,7 @@ static const CGFloat kBallRadius = 2.0;
   
   // setup right-hand side player bar
   rightPaddle_ = [MGPongPaddleLayer layer];
-  rightPaddle_.backgroundColor = CGColorCreateGenericRGB(0.0, 0.0, 0.0, 1.0);
+  rightPaddle_.backgroundColor = CGColorCreateGenericRGB(0.62, 0.16, 0.0, 1.0);
   rightPaddle_.frame = CGRectMake(10.0, 0.0, kPaddleSize.width, kPaddleSize.height);
   rightPaddle_.gameView = self;
   [self.layer addSublayer:rightPaddle_];
@@ -70,31 +84,39 @@ static const CGFloat kBallRadius = 2.0;
   
   // setup ball
   ball_ = [MGPongBallLayer layer];
-  ball_.backgroundColor = CGColorCreateGenericRGB(0.8, 0.1, 0.2, 1.0);
-  ball_.cornerRadius = 2.0;
+  ball_.backgroundColor = CGColorCreateGenericGray(0.0, 1.0);
+  ball_.cornerRadius = kBallRadius;
   ball_.contentsGravity = kCAGravityCenter;
   ball_.frame = CGRectMake(30.0, 10.0, kBallRadius*2.0, kBallRadius*2.0);
   ball_.gameView = self;
   [self.layer addSublayer:ball_];
-
+  
+  // Banner ("winner", "you")
+  NSImage *image = [NSImage imageNamed:@"you-banner-right"];
+  banner_ = [CALayer layer];
+  banner_.contents = image;
+  banner_.autoresizingMask = kCALayerMinXMargin
+                           | kCALayerMaxXMargin
+                           | kCALayerMinYMargin
+                           | kCALayerMaxYMargin;
+  banner_.contentsGravity = kCAGravityLeft;
+  banner_.bounds = NSMakeRect(0.0, 0.0, 50.0, 21.0); // match banner pixels
+  banner_.opacity = 0.0;
+  [self.layer addSublayer:banner_];
+  
   // pause icon up in this bitch
-  NSImage *pauseImage = [NSImage imageNamed:@"Pause"];
+  image = [NSImage imageNamed:@"pause-icon"];
   pauseIcon_ = [CALayer layer];
-  pauseIcon_.contents = pauseImage;
+  pauseIcon_.contents = image;
   pauseIcon_.autoresizingMask = kCALayerMinXMargin
                               | kCALayerMaxXMargin
                               | kCALayerMinYMargin
                               | kCALayerMaxYMargin;
   pauseIcon_.contentsGravity = kCAGravityLeft;
-  pauseIcon_.bounds = NSMakeRect(0, 0, pauseImage.size.width,
-                                 pauseImage.size.height);
-  pauseIcon_.opacity = 0;
+  pauseIcon_.bounds =
+      NSMakeRect(0.0, 0.0, image.size.width, image.size.height);
+  pauseIcon_.opacity = 0.0;
   [self.layer addSublayer:pauseIcon_];
-  
-  // Vertical divider in center
-  vDividerLayer_ = [CALayer layer];
-  vDividerLayer_.backgroundColor = CGColorCreateGenericGray(0.0, 0.2);
-  [self.layer addSublayer:vDividerLayer_];
     
   return self;
 }
@@ -105,19 +127,85 @@ static const CGFloat kBallRadius = 2.0;
 }
 
 
+- (void)_resumeUpdatingWithDelayId:(NSTimer*)timer {
+  if (timer != animationTimer_) {
+    // this timer was aborted
+    NSLog(@"this timer was aborted");
+    [timer release];
+    return;
+  }
+  
+  // remove "pending" animation from ball
+  [ball_ removeAllAnimations];
+  
+  timeOfLastUpdate_ = mach_absolute_time();
+  [[NSRunLoop mainRunLoop] addTimer:animationTimer_
+                            forMode:NSDefaultRunLoopMode];
+  [animationTimer_ release];
+}
+
+
 - (void)resumeUpdating {
   if (animationTimer_)
     return;
+  [self hideBanner:self];
   NSMethodSignature *sig = 
       [isa instanceMethodSignatureForSelector:@selector(update)];
   NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
   [inv setSelector:@selector(update)];
   [inv setTarget:self];
-  timeOfLastUpdate_ = mach_absolute_time();
-  animationTimer_ = [NSTimer scheduledTimerWithTimeInterval:1.0 / 60.0
-                                              invocation:inv
-                                                 repeats:YES];
+  animationTimer_ = [NSTimer timerWithTimeInterval:1.0 / 60.0
+                                        invocation:inv
+                                           repeats:YES];
   [animationTimer_ retain];
+  
+  // Seconds delay until game commence
+  const CGFloat startDelay = 1.0;
+  
+  // Add "pending" animation to ball
+  
+  CABasicAnimation *anim = [CABasicAnimation animationWithKeyPath:@"opacity"];
+  anim.duration = startDelay / 4.0;
+  anim.fromValue = [NSNumber numberWithFloat:1.0];
+  anim.toValue = [NSNumber numberWithFloat:0.5];
+  anim.autoreverses = YES;
+  anim.repeatCount = HUGE_VALF;
+  anim.timingFunction = [CAMediaTimingFunction functionWithName:
+                         kCAMediaTimingFunctionEaseInEaseOut];
+  [ball_ addAnimation:anim forKey:@"animateOpacity"];
+  
+  CGPoint startPosition = ball_.position;
+  CGPoint nextPosition = [ball_ positionInFuture:startDelay * 0.2];
+  
+  if (ceil(startPosition.x * 1000.0) != ceil(nextPosition.x * 1000.0)) {
+    anim = [CABasicAnimation animationWithKeyPath:@"position.x"];
+    anim.duration = startDelay / 4.0;
+    anim.fromValue = [NSNumber numberWithFloat:startPosition.x];
+    anim.toValue = [NSNumber numberWithFloat:nextPosition.x];
+    anim.autoreverses = YES;
+    anim.repeatCount = HUGE_VALF;
+    anim.timingFunction = [CAMediaTimingFunction functionWithName:
+                           kCAMediaTimingFunctionEaseIn];
+    [ball_ addAnimation:anim forKey:@"animatePositionX"];
+  }
+  if (ceil(startPosition.y * 1000.0) != ceil(nextPosition.y * 1000.0)) {
+    anim = [CABasicAnimation animationWithKeyPath:@"position.y"];
+    anim.duration = startDelay / 4.0;
+    anim.fromValue = [NSNumber numberWithFloat:startPosition.y];
+    anim.toValue = [NSNumber numberWithFloat:nextPosition.y];
+    anim.autoreverses = YES;
+    anim.repeatCount = HUGE_VALF;
+    anim.timingFunction = [CAMediaTimingFunction functionWithName:
+                           kCAMediaTimingFunctionEaseIn];
+    [ball_ addAnimation:anim forKey:@"animatePositionY"];
+  }
+  
+  
+  // Start timer after 1 second to allow players to prepare
+  [animationTimer_ retain];
+  [self performSelector:@selector(_resumeUpdatingWithDelayId:)
+             withObject:animationTimer_
+             afterDelay:startDelay];
 }
 
 
@@ -144,6 +232,19 @@ static const CGFloat kBallRadius = 2.0;
 }
 
 
+- (void)updateVerticalDivider {
+  // Vertical divider visualizes score
+  CGSize size = self.layer.bounds.size;
+  CGFloat centerX = size.width / 2.0;
+  CGFloat x = round(centerX + (score_ * centerX));
+  
+  [CATransaction begin];
+  [CATransaction setDisableActions:NO];
+  vDividerLayer_.frame = CGRectMake(x, 0.0, 1.0, size.height);
+  [CATransaction commit];
+}
+
+
 - (void)paddle:(MGPongPaddleLayer*)paddle
 destinationChangedFrom:(CGFloat)startYPosition
   withDuration:(CFTimeInterval)duration {
@@ -156,23 +257,35 @@ destinationChangedFrom:(CGFloat)startYPosition
 }
 
 
-- (void)ballHitLeftWall:(MGPongBallLayer*)ball {
-  if (leftPaddle_ == player1_.paddleLayer) {
-    player1_.score = player1_.score - 0.2;
+- (CGFloat)score {
+  return score_;
+}
+
+
+- (void)setScore:(CGFloat)score {
+  score_ = score;
+  NSLog(@"score: %f", score);
+  if (score_ >= 0.98) {
+    [self showBanner:@"winner-banner-left" duration:0.0];
+    [self newGame:self];
+  } else if (score_ <= -0.98) {
+    [self showBanner:@"winner-banner-right" duration:0.0];
+    [self newGame:self];
   } else {
-    player2_.score = player2_.score - 0.2;
+    [self updateVerticalDivider];
   }
+}
+
+
+- (void)ballHitLeftWall:(MGPongBallLayer*)ball {
+  self.score -= 0.1;
   [self resetGame:self];
   waitingToStartGame_ = NO;
   [self performSelector:@selector(resetGame:) withObject:self afterDelay:0.5];
 }
 
 - (void)ballHitRightWall:(MGPongBallLayer*)ball {
-  if (rightPaddle_ == player1_.paddleLayer) {
-    player1_.score = player1_.score - 0.2;
-  } else {
-    player2_.score = player2_.score - 0.2;
-  }
+  self.score += 0.1;
   [self resetGame:self];
   waitingToStartGame_ = NO;
   [self performSelector:@selector(resetGame:) withObject:self afterDelay:0.5];
@@ -186,14 +299,47 @@ destinationChangedFrom:(CGFloat)startYPosition
 
     // Reset game to initial state
     [super setFrame:frame];
-    [self resetGame:self];
+    [self newGame:self];
   } else {
     [super setFrame:frame];
   }
   
-  // Update vertical divider frame
-  vDividerLayer_.frame = CGRectMake(ceil(frame.size.width / 2.0), 0.0,
-                                    1.0, frame.size.height);
+  // Update vertical dividers
+  leftDividerLayer_.frame = CGRectMake(0.0, 0.0, 1.0, frame.size.height);
+  rightDividerLayer_.frame = CGRectMake(frame.size.width-1.0, 0.0,
+                                        1.0, frame.size.height);
+  [self updateVerticalDivider];
+}
+
+
+- (void)hideBanner:(id)sender {
+  banner_.opacity = 0.0;
+}
+
+
+- (void)showBanner:(NSString*)imageName duration:(NSTimeInterval)duration {
+  banner_.contents = [NSImage imageNamed:imageName];
+  banner_.opacity = 1.0;
+  if (duration > 0.0)
+    [self performSelector:@selector(hideBanner:) withObject:self afterDelay:duration];
+}
+
+
+- (void)newGame:(id)sender {
+  self.score = 0.0;
+  
+  // Show "you" banner if no banner is visible
+  if (banner_.opacity < 1.0) {
+    if (!remotePlayerPaddle_) {
+      [self showBanner:@"you-banner-2locals" duration:0.0];
+    } else if (localPlayerPaddle_ == rightPaddle_) {
+      [self showBanner:@"you-banner-right" duration:4.0];
+    } else {
+      [self showBanner:@"you-banner-left" duration:4.0];
+    }
+  }
+  
+  [self resetGame:sender];
 }
 
 
@@ -202,6 +348,9 @@ destinationChangedFrom:(CGFloat)startYPosition
   NSSize currentSize = self.bounds.size;
   CGFloat paddleCenterY =
       (currentSize.height - rightPaddle_.bounds.size.height) / 2.0;
+  
+  // remove any animations from the ball
+  [ball_ removeAllAnimations];
   
   [CATransaction begin];
   [CATransaction setDisableActions:YES];
@@ -222,7 +371,7 @@ destinationChangedFrom:(CGFloat)startYPosition
       CGRectMake((currentSize.width / 2.0) - kBallRadius,
                  (currentSize.height / 2.0) - kBallRadius,
                  kBallRadius*2.0, kBallRadius*2.0);
-  [ball_ reset];
+  [ball_ resetBasedOnCurrentScore:score_];
   
   // Now waiting for a player to move in order to start the game
   waitingToStartGame_ = YES;
@@ -274,6 +423,24 @@ destinationChangedFrom:(CGFloat)startYPosition
         return;
       }
       break;
+    case 'f': // Cmd+F = toggle fullscreen
+      if ([NSEvent modifierFlags] & NSCommandKeyMask) {
+        [self toggleFullscreen:self];
+        return;
+      }
+      break;
+    /*case 'r': // Cmd+R = reset game
+      if ([NSEvent modifierFlags] & NSCommandKeyMask) {
+        [self resetGame:self];
+        return;
+      }
+      break;*/
+    case 'n': // Cmd+N = new game
+      if ([NSEvent modifierFlags] & NSCommandKeyMask) {
+        [self newGame:self];
+        return;
+      }
+      break;
     default:
       //NSLog(@"keyDown:%d", ch);
       break;
@@ -322,18 +489,6 @@ destinationChangedFrom:(CGFloat)startYPosition
       if ([self isInFullScreenMode]) {
         // Exit fullscreen
         [self toggleFullscreen:self];
-        return;
-      }
-      break;
-    case 'f': // Cmd+F = toggle fullscreen
-      if ([NSEvent modifierFlags] & NSCommandKeyMask) {
-        [self toggleFullscreen:self];
-        return;
-      }
-      break;
-    case 'r': // Cmd+F = reset game
-      if ([NSEvent modifierFlags] & NSCommandKeyMask) {
-        [self resetGame:self];
         return;
       }
       break;
@@ -403,11 +558,21 @@ destinationChangedFrom:(CGFloat)startYPosition
 - (void)windowDidBecomeKey:(NSNotification *)notification {
   waitingToStartGame_ = YES; // resume updating at first user interaction
   pauseIcon_.opacity = 0;
+  self.layer.opacity = 1.0;
+  leftPaddle_.opacity = 1.0;
+  rightPaddle_.opacity = 1.0;
+  ball_.opacity = 1.0;
+  banner_.opacity = 1.0;
 }
 
 - (void)windowDidResignKey:(NSNotification *)notification {
   [self pauseUpdating];
-  pauseIcon_.opacity = 1;
+  pauseIcon_.opacity = 1.0;
+  self.layer.opacity = 0.5;
+  leftPaddle_.opacity = 0.0;
+  rightPaddle_.opacity = 0.0;
+  ball_.opacity = 0.0;
+  banner_.opacity = 0.0;
 }
 
 @end

@@ -14,16 +14,20 @@
 
 @interface MGPongView : NSView <NSWindowDelegate> {
   NSSize baseSize_;
-  CALayer *pauseIcon_;
   NSTimer *animationTimer_;
   MGPongBallLayer *ball_;
-  MGPongPaddleLayer *rightPaddle_;
   MGPongPaddleLayer *leftPaddle_;
+  MGPongPaddleLayer *rightPaddle_;
   MGPongPlayer *player1_; // left-hand side
   MGPongPlayer *player2_; // right-hand side
+  CALayer *pauseIcon_;
+  CALayer *banner_;
   __weak MGPongPaddleLayer *localPlayerPaddle_;
   __weak MGPongPaddleLayer *remotePlayerPaddle_; // AI or non-local human
   CALayer *vDividerLayer_;
+  CALayer *leftDividerLayer_;
+  CALayer *rightDividerLayer_;
+  CGFloat score_;
   BOOL up1KeyPressed_;
   BOOL down1KeyPressed_;
   BOOL up2KeyPressed_;
@@ -38,12 +42,18 @@
 @property (readonly) MGPongPaddleLayer *firstPlayerPaddle;
 @property (readonly) MGPongPaddleLayer *secondPlayerPaddle;
 
+@property (assign, nonatomic) CGFloat score;
+
 - (void)toggleFullscreen:(id)sender;
 - (void)resetGame:(id)sender;
 - (void)startGame:(id)sender;
+- (void)newGame:(id)sender;
 
 - (void)resumeUpdating;
 - (void)pauseUpdating;
+
+- (void)showBanner:(NSString*)imageName duration:(NSTimeInterval)duration;
+- (void)hideBanner:(id)sender;
 
 - (void)paddle:(MGPongPaddleLayer*)paddle
 destinationChangedFrom:(CGFloat)startYPosition

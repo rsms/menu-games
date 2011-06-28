@@ -18,9 +18,14 @@
 		6A88C94813B2EEA300EC6CB2 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A88C94613B2EEA300EC6CB2 /* MainMenu.xib */; };
 		6A88C96013B2F12600EC6CB2 /* MGPongView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A88C95F13B2F12600EC6CB2 /* MGPongView.m */; };
 		6A88C96313B2FC7A00EC6CB2 /* MGGameWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A88C96213B2FC7A00EC6CB2 /* MGGameWindow.m */; };
+		6A8B0AC313BA785F005A1307 /* winner-banner-left.png in Resources */ = {isa = PBXBuildFile; fileRef = 6A8B0ABF13BA785F005A1307 /* winner-banner-left.png */; };
+		6A8B0AC413BA785F005A1307 /* winner-banner-right.png in Resources */ = {isa = PBXBuildFile; fileRef = 6A8B0AC013BA785F005A1307 /* winner-banner-right.png */; };
+		6A8B0AC513BA785F005A1307 /* you-banner-left.png in Resources */ = {isa = PBXBuildFile; fileRef = 6A8B0AC113BA785F005A1307 /* you-banner-left.png */; };
+		6A8B0AC613BA785F005A1307 /* you-banner-right.png in Resources */ = {isa = PBXBuildFile; fileRef = 6A8B0AC213BA785F005A1307 /* you-banner-right.png */; };
+		6A8B0AC913BA85D0005A1307 /* you-banner-2locals.png in Resources */ = {isa = PBXBuildFile; fileRef = 6A8B0AC813BA85D0005A1307 /* you-banner-2locals.png */; };
 		6A9BA9A313B8F00C00263858 /* MGPongPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A9BA9A213B8F00C00263858 /* MGPongPlayer.m */; };
+		6AC91AB713BA6CE100F6867D /* pause-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6AC91AB613BA6CE100F6867D /* pause-icon.png */; };
 		6AD5A04D13B6CC19009EAEA7 /* MGPongPaddleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AD5A04C13B6CC19009EAEA7 /* MGPongPaddleLayer.m */; };
-		CA89C5D213B324A700D0E1AC /* Pause.png in Resources */ = {isa = PBXBuildFile; fileRef = CA89C5D113B324A700D0E1AC /* Pause.png */; };
 		CA89C5D513B3258800D0E1AC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA89C5D413B3258800D0E1AC /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
@@ -48,11 +53,16 @@
 		6A88C95F13B2F12600EC6CB2 /* MGPongView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MGPongView.m; path = ../MGPongView.m; sourceTree = "<group>"; };
 		6A88C96113B2FC7A00EC6CB2 /* MGGameWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGGameWindow.h; sourceTree = "<group>"; };
 		6A88C96213B2FC7A00EC6CB2 /* MGGameWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGGameWindow.m; sourceTree = "<group>"; };
+		6A8B0ABF13BA785F005A1307 /* winner-banner-left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "winner-banner-left.png"; sourceTree = "<group>"; };
+		6A8B0AC013BA785F005A1307 /* winner-banner-right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "winner-banner-right.png"; sourceTree = "<group>"; };
+		6A8B0AC113BA785F005A1307 /* you-banner-left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "you-banner-left.png"; sourceTree = "<group>"; };
+		6A8B0AC213BA785F005A1307 /* you-banner-right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "you-banner-right.png"; sourceTree = "<group>"; };
+		6A8B0AC813BA85D0005A1307 /* you-banner-2locals.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "you-banner-2locals.png"; sourceTree = "<group>"; };
 		6A9BA9A113B8F00C00263858 /* MGPongPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGPongPlayer.h; sourceTree = "<group>"; };
 		6A9BA9A213B8F00C00263858 /* MGPongPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGPongPlayer.m; sourceTree = "<group>"; };
+		6AC91AB613BA6CE100F6867D /* pause-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pause-icon.png"; sourceTree = "<group>"; };
 		6AD5A04B13B6CC19009EAEA7 /* MGPongPaddleLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MGPongPaddleLayer.h; path = MenuGames.xcodeproj/MGPongPaddleLayer.h; sourceTree = SOURCE_ROOT; };
 		6AD5A04C13B6CC19009EAEA7 /* MGPongPaddleLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MGPongPaddleLayer.m; path = MenuGames.xcodeproj/MGPongPaddleLayer.m; sourceTree = SOURCE_ROOT; };
-		CA89C5D113B324A700D0E1AC /* Pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pause.png; sourceTree = "<group>"; };
 		CA89C5D413B3258800D0E1AC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -135,7 +145,12 @@
 		6A88C93813B2EEA300EC6CB2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				CA89C5D113B324A700D0E1AC /* Pause.png */,
+				6AC91AB613BA6CE100F6867D /* pause-icon.png */,
+				6A8B0ABF13BA785F005A1307 /* winner-banner-left.png */,
+				6A8B0AC013BA785F005A1307 /* winner-banner-right.png */,
+				6A8B0AC813BA85D0005A1307 /* you-banner-2locals.png */,
+				6A8B0AC113BA785F005A1307 /* you-banner-left.png */,
+				6A8B0AC213BA785F005A1307 /* you-banner-right.png */,
 				6A88C93913B2EEA300EC6CB2 /* MenuGames-Info.plist */,
 				6A88C93A13B2EEA300EC6CB2 /* InfoPlist.strings */,
 				6A88C93D13B2EEA300EC6CB2 /* MenuGames-Prefix.pch */,
@@ -195,7 +210,12 @@
 				6A88C93C13B2EEA300EC6CB2 /* InfoPlist.strings in Resources */,
 				6A88C94213B2EEA300EC6CB2 /* Credits.rtf in Resources */,
 				6A88C94813B2EEA300EC6CB2 /* MainMenu.xib in Resources */,
-				CA89C5D213B324A700D0E1AC /* Pause.png in Resources */,
+				6AC91AB713BA6CE100F6867D /* pause-icon.png in Resources */,
+				6A8B0AC313BA785F005A1307 /* winner-banner-left.png in Resources */,
+				6A8B0AC413BA785F005A1307 /* winner-banner-right.png in Resources */,
+				6A8B0AC513BA785F005A1307 /* you-banner-left.png in Resources */,
+				6A8B0AC613BA785F005A1307 /* you-banner-right.png in Resources */,
+				6A8B0AC913BA85D0005A1307 /* you-banner-2locals.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

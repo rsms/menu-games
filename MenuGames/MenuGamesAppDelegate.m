@@ -30,8 +30,8 @@
   [pongView setWantsLayer:YES];
   [gameWindow_ setContentView:pongView];
   [gameWindow_ setLevel:NSStatusWindowLevel];
-  [gameWindow_ setBackgroundColor:[NSColor colorWithCalibratedWhite:1.0 alpha:0.1]];
-  //[gameWindow_ setBackgroundColor:[NSColor clearColor]];
+  //[gameWindow_ setBackgroundColor:[NSColor colorWithCalibratedWhite:1.0 alpha:0.1]];
+  [gameWindow_ setBackgroundColor:[NSColor clearColor]];
   [gameWindow_ setOpaque:NO];
   [gameWindow_ setDelegate:pongView];
   [gameWindow_ makeKeyAndOrderFront:self];
