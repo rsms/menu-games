@@ -79,7 +79,7 @@
   }
   
   // set duration depending on distance
-  static const CFTimeInterval baseDuration = 2.0; // seconds it takes to move 100%
+  static const CFTimeInterval baseDuration = 1.0; // seconds it takes to move 100%
   CFTimeInterval duration = (currentY - position.y) / maxY;
   if (duration < 0) duration = -duration;
   duration *= baseDuration;

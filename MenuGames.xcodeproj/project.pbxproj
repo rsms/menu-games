@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		6A1A51E513B7D39100D696EB /* MGPeriodicTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A1A51E413B7D39100D696EB /* MGPeriodicTimer.m */; };
 		6A6D2FD513B3A45F00C1ED12 /* MGPongBallLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A6D2FD413B3A45F00C1ED12 /* MGPongBallLayer.m */; };
-		6A6D2FFC13B3A71A00C1ED12 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A6D2FFB13B3A71A00C1ED12 /* QuartzCore.framework */; };
 		6A88C93213B2EEA300EC6CB2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A88C93113B2EEA200EC6CB2 /* Cocoa.framework */; };
 		6A88C93C13B2EEA300EC6CB2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6A88C93A13B2EEA300EC6CB2 /* InfoPlist.strings */; };
 		6A88C93F13B2EEA300EC6CB2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A88C93E13B2EEA300EC6CB2 /* main.m */; };
@@ -26,6 +25,8 @@
 		6A9BA9A313B8F00C00263858 /* MGPongPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A9BA9A213B8F00C00263858 /* MGPongPlayer.m */; };
 		6AC91AB713BA6CE100F6867D /* pause-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6AC91AB613BA6CE100F6867D /* pause-icon.png */; };
 		6AD5A04D13B6CC19009EAEA7 /* MGPongPaddleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AD5A04C13B6CC19009EAEA7 /* MGPongPaddleLayer.m */; };
+		6AE3DB9513BABF0F006C3F25 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AE3DB9413BABF0F006C3F25 /* Carbon.framework */; };
+		6AE3DB9813BAC6D4006C3F25 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6AE3DB9713BAC6D4006C3F25 /* icon.icns */; };
 		CA89C5D513B3258800D0E1AC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA89C5D413B3258800D0E1AC /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
@@ -36,7 +37,7 @@
 		6A6D2FD313B3A45F00C1ED12 /* MGPongBallLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGPongBallLayer.h; sourceTree = "<group>"; };
 		6A6D2FD413B3A45F00C1ED12 /* MGPongBallLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGPongBallLayer.m; sourceTree = "<group>"; };
 		6A6D2FFB13B3A71A00C1ED12 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		6A88C92D13B2EEA200EC6CB2 /* MenuGames.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MenuGames.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6A88C92D13B2EEA200EC6CB2 /* Menu Pong.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Menu Pong.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A88C93113B2EEA200EC6CB2 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		6A88C93413B2EEA300EC6CB2 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		6A88C93513B2EEA300EC6CB2 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -63,6 +64,8 @@
 		6AC91AB613BA6CE100F6867D /* pause-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pause-icon.png"; sourceTree = "<group>"; };
 		6AD5A04B13B6CC19009EAEA7 /* MGPongPaddleLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MGPongPaddleLayer.h; path = MenuGames.xcodeproj/MGPongPaddleLayer.h; sourceTree = SOURCE_ROOT; };
 		6AD5A04C13B6CC19009EAEA7 /* MGPongPaddleLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MGPongPaddleLayer.m; path = MenuGames.xcodeproj/MGPongPaddleLayer.m; sourceTree = SOURCE_ROOT; };
+		6AE3DB9413BABF0F006C3F25 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		6AE3DB9713BAC6D4006C3F25 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
 		CA89C5D413B3258800D0E1AC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -73,7 +76,7 @@
 			files = (
 				CA89C5D513B3258800D0E1AC /* QuartzCore.framework in Frameworks */,
 				6A88C93213B2EEA300EC6CB2 /* Cocoa.framework in Frameworks */,
-				6A6D2FFC13B3A71A00C1ED12 /* QuartzCore.framework in Frameworks */,
+				6AE3DB9513BABF0F006C3F25 /* Carbon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,7 +96,7 @@
 		6A88C92E13B2EEA200EC6CB2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6A88C92D13B2EEA200EC6CB2 /* MenuGames.app */,
+				6A88C92D13B2EEA200EC6CB2 /* Menu Pong.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -101,6 +104,7 @@
 		6A88C93013B2EEA200EC6CB2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6AE3DB9413BABF0F006C3F25 /* Carbon.framework */,
 				6A6D2FFB13B3A71A00C1ED12 /* QuartzCore.framework */,
 				6A88C93113B2EEA200EC6CB2 /* Cocoa.framework */,
 				6A88C93313B2EEA300EC6CB2 /* Other Frameworks */,
@@ -145,6 +149,7 @@
 		6A88C93813B2EEA300EC6CB2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				6AE3DB9713BAC6D4006C3F25 /* icon.icns */,
 				6AC91AB613BA6CE100F6867D /* pause-icon.png */,
 				6A8B0ABF13BA785F005A1307 /* winner-banner-left.png */,
 				6A8B0AC013BA785F005A1307 /* winner-banner-right.png */,
@@ -163,9 +168,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6A88C92C13B2EEA200EC6CB2 /* MenuGames */ = {
+		6A88C92C13B2EEA200EC6CB2 /* Menu Pong */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6A88C94B13B2EEA300EC6CB2 /* Build configuration list for PBXNativeTarget "MenuGames" */;
+			buildConfigurationList = 6A88C94B13B2EEA300EC6CB2 /* Build configuration list for PBXNativeTarget "Menu Pong" */;
 			buildPhases = (
 				6A88C92913B2EEA200EC6CB2 /* Sources */,
 				6A88C92A13B2EEA200EC6CB2 /* Frameworks */,
@@ -175,9 +180,9 @@
 			);
 			dependencies = (
 			);
-			name = MenuGames;
+			name = "Menu Pong";
 			productName = MenuGames;
-			productReference = 6A88C92D13B2EEA200EC6CB2 /* MenuGames.app */;
+			productReference = 6A88C92D13B2EEA200EC6CB2 /* Menu Pong.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -197,7 +202,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6A88C92C13B2EEA200EC6CB2 /* MenuGames */,
+				6A88C92C13B2EEA200EC6CB2 /* Menu Pong */,
 			);
 		};
 /* End PBXProject section */
@@ -216,6 +221,7 @@
 				6A8B0AC513BA785F005A1307 /* you-banner-left.png in Resources */,
 				6A8B0AC613BA785F005A1307 /* you-banner-right.png in Resources */,
 				6A8B0AC913BA85D0005A1307 /* you-banner-2locals.png in Resources */,
+				6AE3DB9813BAC6D4006C3F25 /* icon.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -309,6 +315,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MenuGames/MenuGames-Prefix.pch";
 				INFOPLIST_FILE = "MenuGames/MenuGames-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -324,6 +331,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MenuGames/MenuGames-Prefix.pch";
 				INFOPLIST_FILE = "MenuGames/MenuGames-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -341,7 +349,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6A88C94B13B2EEA300EC6CB2 /* Build configuration list for PBXNativeTarget "MenuGames" */ = {
+		6A88C94B13B2EEA300EC6CB2 /* Build configuration list for PBXNativeTarget "Menu Pong" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6A88C94C13B2EEA300EC6CB2 /* Debug */,

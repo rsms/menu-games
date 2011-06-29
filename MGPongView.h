@@ -22,6 +22,7 @@
   MGPongPlayer *player2_; // right-hand side
   CALayer *pauseIcon_;
   CALayer *banner_;
+  CGFloat bannerDestinationOpacity_;
   __weak MGPongPaddleLayer *localPlayerPaddle_;
   __weak MGPongPaddleLayer *remotePlayerPaddle_; // AI or non-local human
   CALayer *vDividerLayer_;

@@ -66,7 +66,7 @@ static CGFloat rad2deg(const CGFloat radians) {
 
 - (void)resetBasedOnCurrentScore:(CGFloat)score {
   // How far the ball moves during 1 second:
-  const CGFloat speed = 30.0;
+  const CGFloat speed = 40.0;
   
   // Initial angle
   CGFloat radians;

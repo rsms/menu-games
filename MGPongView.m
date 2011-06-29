@@ -215,6 +215,9 @@ static const CGFloat kBallRadius = 2.0;
   [animationTimer_ invalidate];
   [animationTimer_ release];
   animationTimer_ = nil;
+  
+  // remove any animations from the ball
+  [ball_ removeAllAnimations];
 }
 
 
@@ -313,13 +316,13 @@ destinationChangedFrom:(CGFloat)startYPosition
 
 
 - (void)hideBanner:(id)sender {
-  banner_.opacity = 0.0;
+  banner_.opacity = bannerDestinationOpacity_ = 0.0;
 }
 
 
 - (void)showBanner:(NSString*)imageName duration:(NSTimeInterval)duration {
   banner_.contents = [NSImage imageNamed:imageName];
-  banner_.opacity = 1.0;
+  banner_.opacity = bannerDestinationOpacity_ = 1.0;
   if (duration > 0.0)
     [self performSelector:@selector(hideBanner:) withObject:self afterDelay:duration];
 }
@@ -385,6 +388,11 @@ destinationChangedFrom:(CGFloat)startYPosition
   // Triggered at first user interaction after the game was reset
   waitingToStartGame_ = NO;
   [self resumeUpdating];
+}
+
+
+- (void)quit:(id)sender {
+  [NSApp terminate:sender];
 }
 
 
@@ -500,6 +508,25 @@ destinationChangedFrom:(CGFloat)startYPosition
 }
 
 
+- (void)mouseDown:(NSEvent *)event {
+  NSMenu *menu = [[NSMenu alloc] initWithTitle:@"Hello"];
+  [menu addItemWithTitle:@"New game" action:@selector(newGame:) keyEquivalent:@""];
+  [menu addItemWithTitle:@"Quit" action:@selector(quit:) keyEquivalent:@""];
+  
+  NSPoint wp = {0, self.bounds.size.height + 4.0};
+  wp = [self convertPoint:wp toView:nil];
+  NSEvent* ev = [NSEvent mouseEventWithType:event.type
+                                   location:wp
+                              modifierFlags:0 timestamp:[event timestamp]
+                               windowNumber:[event windowNumber]
+                                    context:[event context]
+                                eventNumber:[event eventNumber]
+                                 clickCount:[event clickCount]
+                                   pressure:[event pressure]];
+  [NSMenu popUpContextMenu:menu withEvent:ev forView:self];
+}
+
+
 - (void)drawRect:(NSRect)rect {
 }
 
@@ -562,7 +589,8 @@ destinationChangedFrom:(CGFloat)startYPosition
   leftPaddle_.opacity = 1.0;
   rightPaddle_.opacity = 1.0;
   ball_.opacity = 1.0;
-  banner_.opacity = 1.0;
+  vDividerLayer_.opacity = 1.0;
+  banner_.opacity = bannerDestinationOpacity_;
 }
 
 - (void)windowDidResignKey:(NSNotification *)notification {
@@ -572,6 +600,7 @@ destinationChangedFrom:(CGFloat)startYPosition
   leftPaddle_.opacity = 0.0;
   rightPaddle_.opacity = 0.0;
   ball_.opacity = 0.0;
+  vDividerLayer_.opacity = 0.0;
   banner_.opacity = 0.0;
 }
 

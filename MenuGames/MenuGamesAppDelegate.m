@@ -9,11 +9,11 @@
 #import "MenuGamesAppDelegate.h"
 #import "MGPongView.h"
 #import "MGGameWindow.h"
+#import <Carbon/Carbon.h>
 
 @implementation MenuGamesAppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-  
   statusItem_ = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
   NSView *emptyView =
       [[NSView alloc] initWithFrame:NSMakeRect(0.0, 0.0, 50.0, 21.0)];
@@ -30,11 +30,17 @@
   [pongView setWantsLayer:YES];
   [gameWindow_ setContentView:pongView];
   [gameWindow_ setLevel:NSStatusWindowLevel];
+  [gameWindow_ setCanHide:NO];
   //[gameWindow_ setBackgroundColor:[NSColor colorWithCalibratedWhite:1.0 alpha:0.1]];
   [gameWindow_ setBackgroundColor:[NSColor clearColor]];
   [gameWindow_ setOpaque:NO];
   [gameWindow_ setDelegate:pongView];
+  [gameWindow_ setInitialFirstResponder:pongView];
   [gameWindow_ makeKeyAndOrderFront:self];
+  [gameWindow_ orderFrontRegardless];
+  
+  // Needed when LSUIElement==YES
+  [NSApp activateIgnoringOtherApps:YES];
   
   [[NSNotificationCenter defaultCenter] addObserver:self
                                            selector:@selector(statusItemWindowDidMove:)
