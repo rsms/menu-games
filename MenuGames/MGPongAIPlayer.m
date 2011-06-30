@@ -26,7 +26,7 @@
   
   gameView_ = gameView;
   self.paddleLayer = paddleLayer;
-  difficulty_ = 0.9;
+  difficulty_ = 5.9;
   
   [gameView_ addObserver:self
               forKeyPath:@"isWarmingUp"
@@ -56,6 +56,10 @@
 }
 
 
+#define AI_USE_REACTION_PHASE 1
+#define AI_USE_REACTION_PROBABILITY 1
+
+
 - (void)updateWithPeriod:(NSTimeInterval)period
                     ball:(MGPongBallLayer*)ball {
   
@@ -81,16 +85,31 @@
   CGFloat distYC = fabs((gameSize.height / 2.0) - paddleCenter.y) / (gameSize.height / 2.0);
   CGFloat distYCPower = 5.0;
   
+  
+#if AI_USE_REACTION_PROBABILITY
+  double prob = 0.5; // probability of reacting (0=never reacts, 1=always reacts)
+  srand((unsigned int)mach_absolute_time()-123);
+  float r = (float)rand() / (float)RAND_MAX;
+  if (r > prob) return;
+#endif
+  
+#if AI_USE_REACTION_PHASE
+  double frequency = 0.6; // Every N percentage of the updates to care about
+  int phase =
+      (int)ceil((double)(mach_absolute_time() % 1000000000L) / (1000000000.0 * (1.0-frequency)));
+  if (phase != 1) return;
+#endif
+  
   // clamp distX to 1.0
   if (distX > 1.0) distX = 1.0;
   
   // random reaction speed
   srand((unsigned int)mach_absolute_time());
-  float randomReaction = (float)rand() / (float)RAND_MAX * 2.0; // [0-2]
+  float reactionQuality = (float)rand() / (float)RAND_MAX * 2.0; // [0-2]
   
   CGFloat difficulty = isWarmingUp_ ? 40.0 : difficulty_;
   difficulty = difficulty - (difficulty * distX);
-  CGFloat delta = distY * difficulty * period * (distYCPower - (distYC * distYCPower)) * randomReaction;
+  CGFloat delta = distY * difficulty * period * (distYCPower - (distYC * distYCPower)) * reactionQuality;
 #if 0
   NSLog(@"%@ difficulty: %f, delta: %f, distY: %f (%f {%f, %f})",
         isWarmingUp_ ? @"WARMUP" : @"PLAYING",
