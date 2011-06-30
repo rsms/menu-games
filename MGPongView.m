@@ -115,6 +115,11 @@ static const CGFloat kBallRadius = 2.0;
   
   // If YES: multiplayer, if NO: computer opponent
   self.localMultiplayer = [[NSUserDefaults standardUserDefaults] boolForKey:@"localMultiplayer"];
+  
+  // To avoid initial sound loading delay
+  NSSound *sound = [NSSound soundNamed:@"Pop"];
+  sound.volume = 0.0;
+  [sound play];
     
   return self;
 }

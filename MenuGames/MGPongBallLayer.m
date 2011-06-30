@@ -46,6 +46,16 @@ static CGFloat rad2deg(const CGFloat radians) {
 }
 
 
+// How far the ball moves during 1 second:
+const CGFloat kInitialSpeed = 40.0;
+const CGFloat kMin1DSpeed = 18.0;
+const CGFloat kMax1DSpeed = 60.0;
+
+// Friction (>1.0 means speed increases, <1.0 means speed decreases)
+const CGFloat kWallFriction = 0.94;
+const CGFloat kPaddleFriction = 1.06;
+
+
 @implementation MGPongBallLayer
 
 @synthesize gameView = gameView_, direction = velocity_;
@@ -65,9 +75,6 @@ static CGFloat rad2deg(const CGFloat radians) {
 
 
 - (void)resetBasedOnCurrentScore:(CGFloat)score {
-  // How far the ball moves during 1 second:
-  const CGFloat speed = 40.0;
-  
   // Initial angle
   CGFloat radians;
   if (score < 0.01 && score > -0.01) {
@@ -123,8 +130,8 @@ static CGFloat rad2deg(const CGFloat radians) {
   // xxx
   //radians = 3.4;
   
-  velocity_.x = speed * cos(radians);
-  velocity_.y = speed * sin(radians);
+  velocity_.x = kInitialSpeed * cos(radians);
+  velocity_.y = kInitialSpeed * sin(radians);
 }
 
 
@@ -207,6 +214,33 @@ static CGFloat rad2deg(const CGFloat radians) {
 }
 
 
+- (void)modifyVelocity:(CGFloat)power {
+  if (power < 1.0) {
+    if (velocity_.x > 0.0) {
+      velocity_.x = MAX(kMin1DSpeed, velocity_.x * power);
+    } else {
+      velocity_.x = MIN(-kMin1DSpeed, velocity_.x * power);
+    }
+    if (velocity_.y > 0.0) {
+      velocity_.y = MAX(kMin1DSpeed, velocity_.y * power);
+    } else {
+      velocity_.y = MIN(-kMin1DSpeed, velocity_.y * power);
+    }
+  } else {
+    if (velocity_.x > 0.0) {
+      velocity_.x = MIN(kMax1DSpeed, velocity_.x * power);
+    } else {
+      velocity_.x = MAX(-kMax1DSpeed, velocity_.x * power);
+    }
+    if (velocity_.y > 0.0) {
+      velocity_.y = MIN(kMax1DSpeed, velocity_.y * power);
+    } else {
+      velocity_.y = MAX(-kMax1DSpeed, velocity_.y * power);
+    }
+  }
+}
+
+
 - (void)update:(NSTimeInterval)period {
   [CATransaction begin];
   [CATransaction setDisableActions:YES];
@@ -227,6 +261,7 @@ static CGFloat rad2deg(const CGFloat radians) {
   if ([self collideWithPaddle:rightPaddle ballFrame:frame isLeftPaddle:NO]) {
     // ok, hit right paddle. Trigger some event or something in the future
     //NSLog(@"hit right paddle");
+    [self modifyVelocity:kPaddleFriction];
     ballPos.x += period * velocity_.x;
     ballPos.y += period * velocity_.y;
     self.position = ballPos;
@@ -234,6 +269,7 @@ static CGFloat rad2deg(const CGFloat radians) {
   } else if ([self collideWithPaddle:leftPaddle ballFrame:frame isLeftPaddle:YES]) {
     // ok, hit left paddle. Trigger some event or something in the future
     //NSLog(@"hit left paddle");
+    [self modifyVelocity:kPaddleFriction];
     ballPos.x += period * velocity_.x;
     ballPos.y += period * velocity_.y;
     self.position = ballPos;
@@ -247,17 +283,20 @@ static CGFloat rad2deg(const CGFloat radians) {
       // top wall
       frame.origin.y = gameBounds.size.height - frame.size.height;
       velocity_.y = -velocity_.y;
+      [self modifyVelocity:kWallFriction];
       [gameView_ ball:self hitVerticalWallOnTop:YES];
       checkCornerCollision = YES;
     } else if (frame.origin.x + frame.size.width > gameBounds.size.width) {
       // right wall
       frame.origin.x = gameBounds.size.width - frame.size.width;
       velocity_.x = -velocity_.x;
+      // We don't add kWallFriction since we will be reset anyhow
       [gameView_ ball:self hitWallBehindPaddle:rightPaddle];
     } else if (frame.origin.y < 0.0) {
       // bottom wall
       frame.origin.y = 0.0;
       velocity_.y = -velocity_.y;
+      [self modifyVelocity:kWallFriction];
       checkCornerCollision = YES;
       [gameView_ ball:self hitVerticalWallOnTop:NO];
     } else if (frame.origin.x < 0.0) {
