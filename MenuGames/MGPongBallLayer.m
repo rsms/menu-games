@@ -119,6 +119,10 @@ static CGFloat rad2deg(const CGFloat radians) {
       radians = kRadians240deg;
     }
   }
+  
+  // xxx
+  //radians = 3.4;
+  
   velocity_.x = speed * cos(radians);
   velocity_.y = speed * sin(radians);
 }

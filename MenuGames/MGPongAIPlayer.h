@@ -9,13 +9,19 @@
 #import <Foundation/Foundation.h>
 #import "MGPongPlayer.h"
 
-@class MGPongPaddleLayer;
+@class MGPongPaddleLayer, MGPongView;
 
 @interface MGPongAIPlayer : MGPongPlayer {
-  CGFloat directionY_;
+  __weak MGPongView *gameView_;
+  BOOL isWarmingUp_;
+  CGFloat difficulty_;
 }
 
-- (id)initWithPaddle:(MGPongPaddleLayer*)paddleLayer;
+@property (assign) BOOL isWarmingUp;
+@property (assign) CGFloat difficulty;
+
+- (id)initWithPaddle:(MGPongPaddleLayer*)paddleLayer
+              inGame:(MGPongView*)gameView;
 
 - (void)updateWithPeriod:(NSTimeInterval)period
                     ball:(MGPongBallLayer*)ball;

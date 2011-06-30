@@ -28,7 +28,8 @@ static const CGFloat kBallRadius = 2.0;
 @implementation MGPongView
 
 @synthesize rightPaddle = rightPaddle_,
-            leftPaddle = leftPaddle_;
+            leftPaddle = leftPaddle_,
+            isWarmingUp = isWarmingUp_;
 
 - (id)initWithFrame:(NSRect)frame {
   self = [super initWithFrame:frame];
@@ -141,7 +142,8 @@ static const CGFloat kBallRadius = 2.0;
                                                              : rightPaddle_;
     // Create AI player
     id oldPlayer = aiPlayer_;
-    aiPlayer_ = [[MGPongAIPlayer alloc] initWithPaddle:remotePlayerPaddle_];
+    aiPlayer_ = [[MGPongAIPlayer alloc] initWithPaddle:remotePlayerPaddle_
+                                                inGame:self];
     [oldPlayer release];
   }
 }
@@ -159,7 +161,7 @@ static const CGFloat kBallRadius = 2.0;
   [ball_ removeAllAnimations];
   
   // Go!
-  isWarmingUp_ = NO;
+  self.isWarmingUp = NO;
 }
 
 
@@ -172,7 +174,8 @@ static const CGFloat kBallRadius = 2.0;
   NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
   [inv setSelector:@selector(update)];
   [inv setTarget:self];
-  isWarmingUp_ = YES;
+  self.isWarmingUp = YES;
+  timeOfLastUpdate_ = mach_absolute_time();
   animationTimer_ = [NSTimer scheduledTimerWithTimeInterval:1.0 / 60.0
                                                  invocation:inv
                                                     repeats:YES];
@@ -195,6 +198,10 @@ static const CGFloat kBallRadius = 2.0;
   
   CGPoint startPosition = ball_.position;
   CGPoint nextPosition = [ball_ positionInFuture:startDelay * 0.2];
+  
+  // Move paddles to the next position
+  rightPaddle_.position = CGPointMake(rightPaddle_.position.x, nextPosition.y);
+  leftPaddle_.position = CGPointMake(leftPaddle_.position.x, nextPosition.y);
   
   if (ceil(startPosition.x * 1000.0) != ceil(nextPosition.x * 1000.0)) {
     anim = [CABasicAnimation animationWithKeyPath:@"position.x"];

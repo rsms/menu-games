@@ -46,6 +46,7 @@
 @property (assign, nonatomic) CGFloat score;
 
 @property (assign, nonatomic) BOOL localMultiplayer;
+@property (assign) BOOL isWarmingUp;
 
 - (void)toggleFullscreen:(id)sender;
 - (void)resetGame:(id)sender;
