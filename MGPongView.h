@@ -35,6 +35,7 @@
   BOOL waitingToStartGame_;
   BOOL isWarmingUp_;
   uint64_t timeOfLastUpdate_;
+  long bannerTimerId_;
 }
 
 @property (readonly) MGPongPaddleLayer *rightPaddle;
@@ -63,7 +64,8 @@
 destinationChangedFrom:(CGFloat)startYPosition
   withDuration:(CFTimeInterval)duration;
 
-- (void)ballHitLeftWall:(MGPongBallLayer*)ball;
-- (void)ballHitRightWall:(MGPongBallLayer*)ball;
+- (void)ball:(MGPongBallLayer*)ball hitPaddle:(MGPongPaddleLayer*)paddle;
+- (void)ball:(MGPongBallLayer*)ball hitWallBehindPaddle:(MGPongPaddleLayer*)paddle;
+- (void)ball:(MGPongBallLayer*)ball hitVerticalWallOnTop:(BOOL)topWall;
 
 @end

@@ -37,6 +37,12 @@
 }
 
 
+- (void)dealloc {
+  [gameView_ removeObserver:self forKeyPath:@"isWarmingUp"];
+  [super dealloc];
+}
+
+
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
                         change:(NSDictionary *)change
@@ -51,22 +57,15 @@
 }
 
 
-- (void)dealloc {
-  [super dealloc];
-}
-
-
 #define AI_USE_REACTION_PHASE 1
 #define AI_USE_REACTION_PROBABILITY 1
 
 
 - (void)updateWithPeriod:(NSTimeInterval)period
                     ball:(MGPongBallLayer*)ball {
+  // Note: Built for controlling the left-hand side paddle. Might or might not
+  // work for the right-hand paddle.
   
-  // TODO: support right-hand-side ai
-  //if (ball.direction.x > 0.0)
-  //  return;
-
   CGSize gameSize = self.paddleLayer.superlayer.bounds.size;
   CGPoint ballPosition = [ball positionInFuture:period];
   CGRect paddleFrame = self.paddleLayer.frame;

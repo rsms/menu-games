@@ -113,8 +113,8 @@ static const CGFloat kBallRadius = 2.0;
   pauseIcon_.opacity = 0.0;
   [self.layer addSublayer:pauseIcon_];
   
-  // Enable AI player by default
-  self.localMultiplayer = NO;
+  // If YES: multiplayer, if NO: computer opponent
+  self.localMultiplayer = [[NSUserDefaults standardUserDefaults] boolForKey:@"localMultiplayer"];
     
   return self;
 }
@@ -146,6 +146,9 @@ static const CGFloat kBallRadius = 2.0;
                                                 inGame:self];
     [oldPlayer release];
   }
+  [[NSUserDefaults standardUserDefaults] setBool:self.localMultiplayer
+                                          forKey:@"localMultiplayer"];
+  [self newGame:self];
 }
 
 
@@ -199,9 +202,11 @@ static const CGFloat kBallRadius = 2.0;
   CGPoint startPosition = ball_.position;
   CGPoint nextPosition = [ball_ positionInFuture:startDelay * 0.2];
   
-  // Move paddles to the next position
-  rightPaddle_.position = CGPointMake(rightPaddle_.position.x, nextPosition.y);
-  leftPaddle_.position = CGPointMake(leftPaddle_.position.x, nextPosition.y);
+  // Move paddles to the next position if playing against computer
+  if (!self.localMultiplayer) {
+    rightPaddle_.position = CGPointMake(rightPaddle_.position.x, nextPosition.y);
+    leftPaddle_.position = CGPointMake(leftPaddle_.position.x, nextPosition.y);
+  }
   
   if (ceil(startPosition.x * 1000.0) != ceil(nextPosition.x * 1000.0)) {
     anim = [CABasicAnimation animationWithKeyPath:@"position.x"];
@@ -299,7 +304,7 @@ destinationChangedFrom:(CGFloat)startYPosition
 
 - (void)setScore:(CGFloat)score {
   score_ = score;
-  NSLog(@"score: %f", score);
+  //NSLog(@"score: %f", score);
   if (score_ >= 0.98) {
     [self showBanner:@"winner-banner-left" duration:0.0];
     [self newGame:self];
@@ -312,18 +317,37 @@ destinationChangedFrom:(CGFloat)startYPosition
 }
 
 
-- (void)ballHitLeftWall:(MGPongBallLayer*)ball {
-  self.score -= 0.1;
-  [self resetGame:self];
-  waitingToStartGame_ = NO;
-  [self performSelector:@selector(resetGame:) withObject:self afterDelay:0.5];
+- (void)ball:(MGPongBallLayer*)ball hitPaddle:(MGPongPaddleLayer*)paddle {
+  if ([[NSUserDefaults standardUserDefaults] boolForKey:@"enableSound"]) {
+    NSSound *sound = [NSSound soundNamed:@"Pop"];
+    sound.volume = 1.0;
+    // TODO: play on right or left speaker only
+    [sound play];
+  }
 }
 
-- (void)ballHitRightWall:(MGPongBallLayer*)ball {
-  self.score += 0.1;
+
+- (void)ball:(MGPongBallLayer*)ball hitWallBehindPaddle:(MGPongPaddleLayer*)paddle {
+  if (paddle == leftPaddle_) {
+    self.score -= 0.1;
+  } else {
+    self.score += 0.1;
+  }
   [self resetGame:self];
   waitingToStartGame_ = NO;
   [self performSelector:@selector(resetGame:) withObject:self afterDelay:0.5];
+  
+  if ([[NSUserDefaults standardUserDefaults] boolForKey:@"enableSound"])
+    [[NSSound soundNamed:@"Blow"] play];
+}
+
+
+- (void)ball:(MGPongBallLayer*)ball hitVerticalWallOnTop:(BOOL)topWall {
+  if ([[NSUserDefaults standardUserDefaults] boolForKey:@"enableSound"]) {
+    NSSound *sound = [NSSound soundNamed:@"Pop"];
+    sound.volume = 0.1;
+    [sound play];
+  }
 }
 
 
@@ -348,6 +372,11 @@ destinationChangedFrom:(CGFloat)startYPosition
 
 
 - (void)hideBanner:(id)sender {
+  if (sender && [sender isKindOfClass:[NSNumber class]] &&
+      bannerTimerId_ != [(NSNumber*)sender longValue]) {
+    // invalid/expired timer
+    return;
+  }
   banner_.opacity = bannerDestinationOpacity_ = 0.0;
 }
 
@@ -355,8 +384,11 @@ destinationChangedFrom:(CGFloat)startYPosition
 - (void)showBanner:(NSString*)imageName duration:(NSTimeInterval)duration {
   banner_.contents = [NSImage imageNamed:imageName];
   banner_.opacity = bannerDestinationOpacity_ = 1.0;
-  if (duration > 0.0)
-    [self performSelector:@selector(hideBanner:) withObject:self afterDelay:duration];
+  if (duration > 0.0) {
+    ++bannerTimerId_;
+    NSNumber *timerId = [NSNumber numberWithLong:bannerTimerId_];
+    [self performSelector:@selector(hideBanner:) withObject:timerId afterDelay:duration];
+  }
 }
 
 
@@ -364,7 +396,7 @@ destinationChangedFrom:(CGFloat)startYPosition
   self.score = 0.0;
   
   // Show "you" banner if no banner is visible
-  if (banner_.opacity < 1.0) {
+  //if (YES || banner_.opacity < 1.0) {
     if (!remotePlayerPaddle_) {
       [self showBanner:@"you-banner-2locals" duration:0.0];
     } else if (localPlayerPaddle_ == rightPaddle_) {
@@ -372,7 +404,7 @@ destinationChangedFrom:(CGFloat)startYPosition
     } else {
       [self showBanner:@"you-banner-left" duration:4.0];
     }
-  }
+  //}
   
   [self resetGame:sender];
 }
@@ -540,9 +572,29 @@ destinationChangedFrom:(CGFloat)startYPosition
 }
 
 
+- (void)toggleComputerOpponent:(id)sender {
+  self.localMultiplayer = !self.localMultiplayer;
+}
+
+- (void)toggleEnableSound:(id)sender {
+  NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+  [ud setBool:![ud boolForKey:@"enableSound"] forKey:@"enableSound"];
+}
+
+
 - (void)mouseDown:(NSEvent *)event {
   NSMenu *menu = [[NSMenu alloc] initWithTitle:@"Hello"];
   [menu addItemWithTitle:@"New game" action:@selector(newGame:) keyEquivalent:@""];
+  
+  [[menu addItemWithTitle:@"2-player mode"
+                  action:@selector(toggleComputerOpponent:)
+           keyEquivalent:@""] setState:self.localMultiplayer];
+  
+  [[menu addItemWithTitle:@"Play sounds"
+                   action:@selector(toggleEnableSound:)
+            keyEquivalent:@""] setState:[[NSUserDefaults standardUserDefaults]
+                                         boolForKey:@"enableSounds"]];
+  
   [menu addItemWithTitle:@"Quit" action:@selector(quit:) keyEquivalent:@""];
   
   NSPoint wp = {0, self.bounds.size.height + 4.0};

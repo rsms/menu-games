@@ -89,13 +89,15 @@ static CGFloat rad2deg(const CGFloat radians) {
   }
   
   // Clamp the angle so the ball has an interesting starting vector
+  // TODO: re-scale the radians to fit 0-1 witin limits instead of simply clamping
+  // TODO: move this to a separate function and reuse for paddle angle limiting
   const CGFloat kRadians60deg = 1.0471975512;
   const CGFloat kRadians120deg = 2.0943951024;
   const CGFloat kRadians240deg = 4.1887902048;
   const CGFloat kRadians300deg = 5.2359877560;
   
   if (radians < kRadians120deg && radians > kRadians60deg) {
-    NSLog(@"clamped radians to outside 60-120");
+    //NSLog(@"clamped radians to outside 60-120");
     if (score < 0.0) { // Right player shoots
       radians = kRadians120deg;
     } else if (score > 0.0) { // Left player shoots
@@ -106,12 +108,10 @@ static CGFloat rad2deg(const CGFloat radians) {
       radians = kRadians60deg;
     }
   } else if (radians < kRadians300deg && radians > kRadians240deg) {
-    NSLog(@"clamped radians to outside 240-300");
+    //NSLog(@"clamped radians to outside 240-300");
     if (score < 0.0) { // Right player shoots
-      NSLog(@"R player shoots -- 240 deg");
       radians = kRadians240deg;
     } else if (score > 0.0) { // Left player shoots
-      NSLog(@"L player shoots -- 300 deg");
       radians = kRadians300deg;
     } else if ((kRadians300deg - radians) < (kRadians240deg - radians)) {
       radians = kRadians300deg;
@@ -226,16 +226,18 @@ static CGFloat rad2deg(const CGFloat radians) {
   // Check for paddle collisions
   if ([self collideWithPaddle:rightPaddle ballFrame:frame isLeftPaddle:NO]) {
     // ok, hit right paddle. Trigger some event or something in the future
-    NSLog(@"hit right paddle");
+    //NSLog(@"hit right paddle");
     ballPos.x += period * velocity_.x;
     ballPos.y += period * velocity_.y;
     self.position = ballPos;
+    [gameView_ ball:self hitPaddle:rightPaddle];
   } else if ([self collideWithPaddle:leftPaddle ballFrame:frame isLeftPaddle:YES]) {
     // ok, hit left paddle. Trigger some event or something in the future
-    NSLog(@"hit left paddle");
+    //NSLog(@"hit left paddle");
     ballPos.x += period * velocity_.x;
     ballPos.y += period * velocity_.y;
     self.position = ballPos;
+    [gameView_ ball:self hitPaddle:leftPaddle];
   } else {
     // Check for wall collisions
     frame = self.frame;
@@ -245,22 +247,24 @@ static CGFloat rad2deg(const CGFloat radians) {
       // top wall
       frame.origin.y = gameBounds.size.height - frame.size.height;
       velocity_.y = -velocity_.y;
+      [gameView_ ball:self hitVerticalWallOnTop:YES];
       checkCornerCollision = YES;
     } else if (frame.origin.x + frame.size.width > gameBounds.size.width) {
       // right wall
       frame.origin.x = gameBounds.size.width - frame.size.width;
       velocity_.x = -velocity_.x;
-      [gameView_ ballHitRightWall:self];
+      [gameView_ ball:self hitWallBehindPaddle:rightPaddle];
     } else if (frame.origin.y < 0.0) {
       // bottom wall
       frame.origin.y = 0.0;
       velocity_.y = -velocity_.y;
       checkCornerCollision = YES;
+      [gameView_ ball:self hitVerticalWallOnTop:NO];
     } else if (frame.origin.x < 0.0) {
       // left wall
       frame.origin.x = 0;
       velocity_.x = -velocity_.x;
-      [gameView_ ballHitLeftWall:self];
+      [gameView_ ball:self hitWallBehindPaddle:leftPaddle];
     }
     
     if (checkCornerCollision) {
@@ -268,10 +272,10 @@ static CGFloat rad2deg(const CGFloat radians) {
       if (frame.origin.x + frame.size.width >
           gameBounds.size.width - frame.size.width) {
         velocity_.x = -velocity_.x;
-        [gameView_ ballHitRightWall:self];
+        [gameView_ ball:self hitWallBehindPaddle:rightPaddle];
       } else if (frame.origin.x < frame.size.width) {
         velocity_.x = -velocity_.x;
-        [gameView_ ballHitLeftWall:self];
+        [gameView_ ball:self hitWallBehindPaddle:leftPaddle];
       }
     }
     
