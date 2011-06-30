@@ -48,7 +48,7 @@ static CGFloat rad2deg(const CGFloat radians) {
 
 @implementation MGPongBallLayer
 
-@synthesize gameView = gameView_;
+@synthesize gameView = gameView_, direction = velocity_;
 
 - (id)init {
   self = [super init];

@@ -10,7 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "MGPeriodicTimerDelegate.h"
 
-@class MGPongBallLayer, MGPongPaddleLayer, MGPeriodicTimer, MGPongPlayer;
+@class MGPongBallLayer, MGPongPaddleLayer, MGPeriodicTimer, MGPongAIPlayer;
 
 @interface MGPongView : NSView <NSWindowDelegate> {
   NSSize baseSize_;
@@ -18,8 +18,7 @@
   MGPongBallLayer *ball_;
   MGPongPaddleLayer *leftPaddle_;
   MGPongPaddleLayer *rightPaddle_;
-  MGPongPlayer *player1_; // left-hand side
-  MGPongPlayer *player2_; // right-hand side
+  MGPongAIPlayer *aiPlayer_; // AI player
   CALayer *pauseIcon_;
   CALayer *banner_;
   CGFloat bannerDestinationOpacity_;
@@ -34,6 +33,7 @@
   BOOL up2KeyPressed_;
   BOOL down2KeyPressed_;
   BOOL waitingToStartGame_;
+  BOOL isWarmingUp_;
   uint64_t timeOfLastUpdate_;
 }
 
@@ -44,6 +44,8 @@
 @property (readonly) MGPongPaddleLayer *secondPlayerPaddle;
 
 @property (assign, nonatomic) CGFloat score;
+
+@property (assign, nonatomic) BOOL localMultiplayer;
 
 - (void)toggleFullscreen:(id)sender;
 - (void)resetGame:(id)sender;

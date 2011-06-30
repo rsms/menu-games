@@ -27,6 +27,7 @@
 		6AD5A04D13B6CC19009EAEA7 /* MGPongPaddleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AD5A04C13B6CC19009EAEA7 /* MGPongPaddleLayer.m */; };
 		6AE3DB9513BABF0F006C3F25 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AE3DB9413BABF0F006C3F25 /* Carbon.framework */; };
 		6AE3DB9813BAC6D4006C3F25 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6AE3DB9713BAC6D4006C3F25 /* icon.icns */; };
+		6AE3DBA313BB0EEE006C3F25 /* MGPongAIPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AE3DBA213BB0EEE006C3F25 /* MGPongAIPlayer.m */; };
 		CA89C5D513B3258800D0E1AC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA89C5D413B3258800D0E1AC /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
@@ -66,6 +67,8 @@
 		6AD5A04C13B6CC19009EAEA7 /* MGPongPaddleLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MGPongPaddleLayer.m; path = MenuGames.xcodeproj/MGPongPaddleLayer.m; sourceTree = SOURCE_ROOT; };
 		6AE3DB9413BABF0F006C3F25 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		6AE3DB9713BAC6D4006C3F25 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
+		6AE3DBA113BB0EEE006C3F25 /* MGPongAIPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGPongAIPlayer.h; sourceTree = "<group>"; };
+		6AE3DBA213BB0EEE006C3F25 /* MGPongAIPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGPongAIPlayer.m; sourceTree = "<group>"; };
 		CA89C5D413B3258800D0E1AC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -127,8 +130,6 @@
 			children = (
 				6A1A51E313B7D39100D696EB /* MGPeriodicTimer.h */,
 				6A1A51E413B7D39100D696EB /* MGPeriodicTimer.m */,
-				6A9BA9A113B8F00C00263858 /* MGPongPlayer.h */,
-				6A9BA9A213B8F00C00263858 /* MGPongPlayer.m */,
 				6A1A51E713B7D4DE00D696EB /* MGPeriodicTimerDelegate.h */,
 				6A88C94313B2EEA300EC6CB2 /* MenuGamesAppDelegate.h */,
 				6A88C94413B2EEA300EC6CB2 /* MenuGamesAppDelegate.m */,
@@ -136,6 +137,10 @@
 				6A88C96213B2FC7A00EC6CB2 /* MGGameWindow.m */,
 				6A88C95E13B2F12600EC6CB2 /* MGPongView.h */,
 				6A88C95F13B2F12600EC6CB2 /* MGPongView.m */,
+				6A9BA9A113B8F00C00263858 /* MGPongPlayer.h */,
+				6A9BA9A213B8F00C00263858 /* MGPongPlayer.m */,
+				6AE3DBA113BB0EEE006C3F25 /* MGPongAIPlayer.h */,
+				6AE3DBA213BB0EEE006C3F25 /* MGPongAIPlayer.m */,
 				6AD5A04B13B6CC19009EAEA7 /* MGPongPaddleLayer.h */,
 				6AD5A04C13B6CC19009EAEA7 /* MGPongPaddleLayer.m */,
 				6A6D2FD313B3A45F00C1ED12 /* MGPongBallLayer.h */,
@@ -240,6 +245,7 @@
 				6AD5A04D13B6CC19009EAEA7 /* MGPongPaddleLayer.m in Sources */,
 				6A1A51E513B7D39100D696EB /* MGPeriodicTimer.m in Sources */,
 				6A9BA9A313B8F00C00263858 /* MGPongPlayer.m in Sources */,
+				6AE3DBA313BB0EEE006C3F25 /* MGPongAIPlayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

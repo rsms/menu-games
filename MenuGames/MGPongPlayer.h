@@ -9,12 +9,13 @@
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
 
-@class MGPongPaddleLayer;
+@class MGPongPaddleLayer, MGPongBallLayer;
 
 @interface MGPongPlayer : NSObject {
   MGPongPaddleLayer *paddleLayer_;
 }
 
 @property (retain, nonatomic) MGPongPaddleLayer *paddleLayer;
+
 
 @end

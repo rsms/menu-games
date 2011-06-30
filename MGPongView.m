@@ -13,7 +13,7 @@
 #import "MGPongBallLayer.h"
 #import "MGPongPaddleLayer.h"
 #import "MGPeriodicTimer.h"
-#import "MGPongPlayer.h"
+#import "MGPongAIPlayer.h"
 
 // Constants
 static const NSSize kPaddleSize = {2.0, 6.0};
@@ -38,10 +38,6 @@ static const CGFloat kBallRadius = 2.0;
   
   // Init base size
   baseSize_ = NSMakeSize(0.0, 0.0);
-  
-  // Player objects
-  player1_ = [MGPongPlayer new];
-  player2_ = [MGPongPlayer new];
   
   // setup background
   self.layer = [self makeBackingLayer];
@@ -69,7 +65,6 @@ static const CGFloat kBallRadius = 2.0;
   leftPaddle_.gameView = self;
   // Note: Don't set delegate here or presentation layer metrics get messed up
   [self.layer addSublayer:leftPaddle_];
-  player1_.paddleLayer = leftPaddle_;
   
   // setup right-hand side player bar
   rightPaddle_ = [MGPongPaddleLayer layer];
@@ -77,7 +72,6 @@ static const CGFloat kBallRadius = 2.0;
   rightPaddle_.frame = CGRectMake(10.0, 0.0, kPaddleSize.width, kPaddleSize.height);
   rightPaddle_.gameView = self;
   [self.layer addSublayer:rightPaddle_];
-  player2_.paddleLayer = rightPaddle_;
   
   // Local player
   localPlayerPaddle_ = rightPaddle_;
@@ -117,6 +111,9 @@ static const CGFloat kBallRadius = 2.0;
       NSMakeRect(0.0, 0.0, image.size.width, image.size.height);
   pauseIcon_.opacity = 0.0;
   [self.layer addSublayer:pauseIcon_];
+  
+  // Enable AI player by default
+  self.localMultiplayer = NO;
     
   return self;
 }
@@ -124,6 +121,29 @@ static const CGFloat kBallRadius = 2.0;
 
 - (void)dealloc {
   [super dealloc];
+}
+
+
+- (BOOL)localMultiplayer {
+  return !remotePlayerPaddle_;
+}
+
+
+- (void)setLocalMultiplayer:(BOOL)localMultiplayer {
+  if (localMultiplayer) {
+    remotePlayerPaddle_ = nil;
+    if (aiPlayer_) {
+      [aiPlayer_ release];
+      aiPlayer_ = nil;
+    }
+  } else {
+    remotePlayerPaddle_ = localPlayerPaddle_ == rightPaddle_ ? leftPaddle_
+                                                             : rightPaddle_;
+    // Create AI player
+    id oldPlayer = aiPlayer_;
+    aiPlayer_ = [[MGPongAIPlayer alloc] initWithPaddle:remotePlayerPaddle_];
+    [oldPlayer release];
+  }
 }
 
 
@@ -138,10 +158,8 @@ static const CGFloat kBallRadius = 2.0;
   // remove "pending" animation from ball
   [ball_ removeAllAnimations];
   
-  timeOfLastUpdate_ = mach_absolute_time();
-  [[NSRunLoop mainRunLoop] addTimer:animationTimer_
-                            forMode:NSDefaultRunLoopMode];
-  [animationTimer_ release];
+  // Go!
+  isWarmingUp_ = NO;
 }
 
 
@@ -154,9 +172,10 @@ static const CGFloat kBallRadius = 2.0;
   NSInvocation *inv = [NSInvocation invocationWithMethodSignature:sig];
   [inv setSelector:@selector(update)];
   [inv setTarget:self];
-  animationTimer_ = [NSTimer timerWithTimeInterval:1.0 / 60.0
-                                        invocation:inv
-                                           repeats:YES];
+  isWarmingUp_ = YES;
+  animationTimer_ = [NSTimer scheduledTimerWithTimeInterval:1.0 / 60.0
+                                                 invocation:inv
+                                                    repeats:YES];
   [animationTimer_ retain];
   
   // Seconds delay until game commence
@@ -202,7 +221,6 @@ static const CGFloat kBallRadius = 2.0;
   
   
   // Start timer after 1 second to allow players to prepare
-  [animationTimer_ retain];
   [self performSelector:@selector(_resumeUpdatingWithDelayId:)
              withObject:animationTimer_
              afterDelay:startDelay];
@@ -231,7 +249,14 @@ static const CGFloat kBallRadius = 2.0;
   timeOfLastUpdate_ = timeNow;
   
   // Update ball
-  [ball_ update:period];
+  if (!isWarmingUp_) {
+    [ball_ update:period];
+  }
+  
+  // Update AI player
+  if (aiPlayer_) {
+    [aiPlayer_ updateWithPeriod:period ball:ball_];
+  }
 }
 
 

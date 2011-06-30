@@ -17,6 +17,7 @@
 }
 
 @property (retain) MGPongView *gameView;
+@property (readonly) CGPoint direction;
 
 - (CGPoint)positionInFuture:(NSTimeInterval)period;
 
