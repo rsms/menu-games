@@ -34,6 +34,7 @@
   BOOL down2KeyPressed_;
   BOOL waitingToStartGame_;
   BOOL isWarmingUp_;
+  BOOL isInJustWonState_;
   uint64_t timeOfLastUpdate_;
   long bannerTimerId_;
 }

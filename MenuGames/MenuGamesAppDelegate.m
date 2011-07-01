@@ -9,9 +9,55 @@
 #import "MenuGamesAppDelegate.h"
 #import "MGPongView.h"
 #import "MGGameWindow.h"
+#import "MGConstants.h"
 #import <Carbon/Carbon.h>
 
+
+EventHandlerRef g_appEventHandler;
+
+
+static OSStatus handleAppEvent(EventHandlerCallRef myHandler,
+                               EventRef event,
+                               void* userData) {
+  UInt32 mode = 0;
+  OSStatus status = GetEventParameter(event,
+                                      kEventParamSystemUIMode,
+                                      typeUInt32,
+                                      NULL,
+                                      sizeof(UInt32),
+                                      NULL,
+                                      &mode);
+  if (status != noErr)
+    return status;
+  [[NSNotificationCenter defaultCenter] postNotificationName:MGSystemUIModeChangedNotification object:nil userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:mode] forKey:@"mode"]];
+  // e.g. to test for fullscreen changes:
+  // BOOL isFullscreen = mode == kUIModeAllHidden
+  return noErr;
+}
+
+
+static void registerForAppEvents() {
+  // Fullscreen detection
+  EventTypeSpec events[] = {{kEventClassApplication, kEventAppSystemUIModeChanged}};
+  OSStatus status = InstallApplicationEventHandler(NewEventHandlerUPP(handleAppEvent),
+                                                   GetEventTypeCount(events),
+                                                   events,
+                                                   nil,
+                                                   &g_appEventHandler);
+  if (status) NSLog(@"WARN: Failed to register for carbon app events");
+  
+  // Check if the user is in presentation mode initially.
+  //SystemUIMode currentMode;
+  //GetSystemUIMode(&currentMode, NULL);
+  //fullscreen_ = currentMode == kUIModeAllHidden;
+}
+
+
+
+
+
 @implementation MenuGamesAppDelegate
+
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
   statusItem_ = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
@@ -46,6 +92,16 @@
                                            selector:@selector(statusItemWindowDidMove:)
                                                name:NSWindowDidMoveNotification
                                              object:[emptyView window]];
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(statusItemWindowDidMove:)
+                                               name:NSWindowDidChangeScreenNotification
+                                             object:[emptyView window]];
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(statusItemWindowDidMove:)
+                                               name:NSWindowDidMoveNotification
+                                             object:[emptyView window]];
+  
+  registerForAppEvents();
 }
 
 - (NSRect)statusItemFrame {

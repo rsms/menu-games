@@ -312,9 +312,11 @@ destinationChangedFrom:(CGFloat)startYPosition
   //NSLog(@"score: %f", score);
   if (score_ >= 0.98) {
     [self showBanner:@"winner-banner-left" duration:0.0];
+    isInJustWonState_ = YES;
     [self newGame:self];
   } else if (score_ <= -0.98) {
     [self showBanner:@"winner-banner-right" duration:0.0];
+    isInJustWonState_ = YES;
     [self newGame:self];
   } else {
     [self updateVerticalDivider];
@@ -401,7 +403,7 @@ destinationChangedFrom:(CGFloat)startYPosition
   self.score = 0.0;
   
   // Show "you" banner if no banner is visible
-  //if (YES || banner_.opacity < 1.0) {
+  if (!isInJustWonState_) {
     if (!remotePlayerPaddle_) {
       [self showBanner:@"you-banner-2locals" duration:0.0];
     } else if (localPlayerPaddle_ == rightPaddle_) {
@@ -409,7 +411,7 @@ destinationChangedFrom:(CGFloat)startYPosition
     } else {
       [self showBanner:@"you-banner-left" duration:4.0];
     }
-  //}
+  }
   
   [self resetGame:sender];
 }
@@ -456,6 +458,7 @@ destinationChangedFrom:(CGFloat)startYPosition
 - (void)startGame:(id)sender {
   // Triggered at first user interaction after the game was reset
   waitingToStartGame_ = NO;
+  isInJustWonState_ = NO;
   [self resumeUpdating];
 }
 
