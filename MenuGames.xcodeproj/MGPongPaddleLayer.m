@@ -44,7 +44,7 @@
   if (direction_ == direction)
     return; // noop
   
-  NSSize currentSize = self.superlayer.bounds.size;
+  CGSize currentSize = self.superlayer.bounds.size;
   CGFloat minY = self.bounds.size.height / 2.0;
   CGFloat maxY = currentSize.height - minY;
   

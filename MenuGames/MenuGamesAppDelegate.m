@@ -62,7 +62,7 @@ static void registerForAppEvents() {
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
   statusItem_ = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
   NSView *emptyView =
-      [[NSView alloc] initWithFrame:NSMakeRect(0.0, 0.0, 50.0, 21.0)];
+      [[[NSView alloc] initWithFrame:NSMakeRect(0.0, 0.0, 50.0, 21.0)] autorelease];
   [statusItem_ setView:emptyView];
   [statusItem_ retain];
   [statusItem_ setEnabled:YES];
@@ -72,7 +72,7 @@ static void registerForAppEvents() {
                                                 styleMask:NSBorderlessWindowMask
                                                   backing:NSBackingStoreBuffered
                                                     defer:NO];
-  MGPongView *pongView = [[MGPongView alloc] initWithFrame:NSZeroRect];
+  MGPongView *pongView = [[[MGPongView alloc] initWithFrame:NSZeroRect] autorelease];
   [pongView setWantsLayer:YES];
   [gameWindow_ setContentView:pongView];
   [gameWindow_ setLevel:NSStatusWindowLevel];

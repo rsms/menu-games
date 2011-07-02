@@ -8,7 +8,6 @@
 
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/QuartzCore.h>
-#import "MGPeriodicTimerDelegate.h"
 
 @class MGPongBallLayer, MGPongPaddleLayer, MGPeriodicTimer, MGPongAIPlayer;
 

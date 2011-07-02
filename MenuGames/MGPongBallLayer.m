@@ -149,12 +149,12 @@ const CGFloat kPaddleFriction = 1.06;
         CP((ballFrame.origin.x - (ballFrame.size.width / 2.0)),
            (ballFrame.origin.y - (ballFrame.size.height / 2.0)) );
     
-    CGFloat cd; // distance between ball centers, aka Collision Distance 
+    //CGFloat cd; // distance between ball centers, aka Collision Distance 
     CGFloat rd; // the sum of the two ball's radii 
     CGFloat ballRadius = ballFrame.size.height / 2.0;
     CGFloat paddleRadius = paddleFrame.size.width / 2.0;
     
-    cd = cp_len(cp_sub(ballCenter, paddleCenter));
+    /*cd =*/ cp_len(cp_sub(ballCenter, paddleCenter));
     rd = ballRadius + paddleRadius; 
     
     CGFloat a =

@@ -12,7 +12,6 @@
 #include <math.h>
 #import "MGPongBallLayer.h"
 #import "MGPongPaddleLayer.h"
-#import "MGPeriodicTimer.h"
 #import "MGPongAIPlayer.h"
 
 // Constants
@@ -95,7 +94,7 @@ static const CGFloat kBallRadius = 2.0;
                            | kCALayerMinYMargin
                            | kCALayerMaxYMargin;
   banner_.contentsGravity = kCAGravityLeft;
-  banner_.bounds = NSMakeRect(0.0, 0.0, 50.0, 21.0); // match banner pixels
+  banner_.bounds = CGRectMake(0.0, 0.0, 50.0, 21.0); // match banner pixels
   banner_.opacity = 0.0;
   [self.layer addSublayer:banner_];
   
@@ -109,7 +108,7 @@ static const CGFloat kBallRadius = 2.0;
                               | kCALayerMaxYMargin;
   pauseIcon_.contentsGravity = kCAGravityLeft;
   pauseIcon_.bounds =
-      NSMakeRect(0.0, 0.0, image.size.width, image.size.height);
+      CGRectMake(0.0, 0.0, image.size.width, image.size.height);
   pauseIcon_.opacity = 0.0;
   [self.layer addSublayer:pauseIcon_];
   
@@ -160,7 +159,7 @@ static const CGFloat kBallRadius = 2.0;
 - (void)_resumeUpdatingWithDelayId:(NSTimer*)timer {
   if (timer != animationTimer_) {
     // this timer was aborted
-    NSLog(@"this timer was aborted");
+    //NSLog(@"this timer was aborted");
     [timer release];
     return;
   }
@@ -591,7 +590,7 @@ destinationChangedFrom:(CGFloat)startYPosition
 
 
 - (void)mouseDown:(NSEvent *)event {
-  NSMenu *menu = [[NSMenu alloc] initWithTitle:@"Hello"];
+  NSMenu *menu = [[[NSMenu alloc] initWithTitle:@"Hello"] autorelease];
   [menu addItemWithTitle:@"New game" action:@selector(newGame:) keyEquivalent:@""];
   
   [[menu addItemWithTitle:@"2-player mode"
@@ -601,7 +600,7 @@ destinationChangedFrom:(CGFloat)startYPosition
   [[menu addItemWithTitle:@"Play sounds"
                    action:@selector(toggleEnableSound:)
             keyEquivalent:@""] setState:[[NSUserDefaults standardUserDefaults]
-                                         boolForKey:@"enableSounds"]];
+                                         boolForKey:@"enableSound"]];
   
   [menu addItemWithTitle:@"Quit" action:@selector(quit:) keyEquivalent:@""];
   
