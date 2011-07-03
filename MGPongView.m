@@ -406,9 +406,9 @@ destinationChangedFrom:(CGFloat)startYPosition
     if (!remotePlayerPaddle_) {
       [self showBanner:@"you-banner-2locals" duration:0.0];
     } else if (localPlayerPaddle_ == rightPaddle_) {
-      [self showBanner:@"you-banner-right" duration:4.0];
+      [self showBanner:@"you-banner-right" duration:0.0];
     } else {
-      [self showBanner:@"you-banner-left" duration:4.0];
+      [self showBanner:@"you-banner-left" duration:0.0];
     }
   }
   
